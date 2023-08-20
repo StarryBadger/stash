@@ -1,13 +1,13 @@
 #include "headers.h"
-
 int main()
 {
-    // Keep accepting commands
+    char *home = homePath();
     while (1)
     {
-        // Print appropriate prompt with username, systemname and directory before accepting input
-        prompt();
+        prompt(home);
         char input[4096];
         fgets(input, 4096, stdin);
+        if (prefix("warp",input))
+        warp(input);
     }
 }
