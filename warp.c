@@ -13,7 +13,7 @@ void warp(char *input, char *home, char *prevPath)
     }
     while (path != NULL)
     {
-        printf("PATH:%s\n", path);
+        getcwd(beforeWarp, PATH_MAX);
         mystrcpy(current, path);
         if (prefix("~", path))
             mystrcpy(current, replaceTildeWithHome(home, path));
@@ -23,6 +23,6 @@ void warp(char *input, char *home, char *prevPath)
         getcwd(current, PATH_MAX);
         printf("%s\n", current);
         path = strtok(NULL, " \n\t");
+        mystrcpy(prevPath, beforeWarp);
     }
-    mystrcpy(prevPath, beforeWarp);
 }
