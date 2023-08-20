@@ -19,7 +19,17 @@ bool prefix(char *a, char *b)
     }
     return flag;
 }
-char *replaceWithTilde(char *home, char *path)
+char *removeSubstring(char *substr, char *str)
+{
+    char *newstr = malloc(sizeof(char) * (100));
+    int c = 0;
+    for (int i = length(substr); i <= length(str); i++)
+    {
+        newstr[c++] = str[i];
+    }
+    return newstr;
+}
+char *replaceHomeWithTilde(char *home, char *path)
 {
     char *newPath = malloc(sizeof(char) * (100));
     int c = 0;
@@ -30,10 +40,33 @@ char *replaceWithTilde(char *home, char *path)
     }
     return newPath;
 }
+char *replaceTildeWithHome(char *home, char *path)
+{
+    char *newPath = malloc(sizeof(char) * (PATH_MAX));
+    int c = 0;
+    mystrcpy(newPath, home);
+    for (int i = length(home); i <= length(path); i++)
+    {
+        newPath[i] = path[++c];
+    }
+    return newPath;
+}
 char *mystrcpy(char *a, char *b)
 {
     for (int i = 0; i <= length(b); i++)
     {
         a[i] = b[i];
+    }
+}
+bool equal(char *a, char *b)
+{
+    int i = 0;
+    while (true)
+    {
+        if (!a[i] & !b[i])
+            return true;
+        else if ((!a[i] ^ !b[i]) || (a[i] != b[i]))
+            return false;
+        i++;
     }
 }

@@ -16,7 +16,7 @@ void prompt(char *home)
     gethostname(hostname, sizeof(hostname));
     if (prefix(home, path))
     {
-        printf("<%s@%s:%s>", username, hostname, replaceWithTilde(home, path));
+        printf("<%s@%s:%s>", username, hostname, replaceHomeWithTilde(home, path));
     }
     else
         printf("<%s@%s:%s>", username, hostname, path);
