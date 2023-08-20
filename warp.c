@@ -1,25 +1,28 @@
 #include "headers.h"
 void warp(char *input, char *home, char *prevPath)
 {
-    char s[100];
-    mystrcpy(prevPath, getcwd(s, 100));
+    char beforeWarp[PATH_MAX];
+    char current[PATH_MAX];
+    getcwd(beforeWarp, PATH_MAX);
     char *paths = removeSubstring("warp", input);
     char *path = strtok(paths, " \n\t");
     if (path == NULL)
     {
         chdir(home);
-        mystrcpy(prevPath, getcwd(s, 100));
         printf("%s\n", home);
     }
     while (path != NULL)
     {
-        // printf("\nThe previous path was %s\n\n", prevPath);
+        printf("PATH:%s\n", path);
+        mystrcpy(current, path);
         if (prefix("~", path))
-            mystrcpy(path, replaceTildeWithHome(home, path));
-        if (equal("-", path))
-            mystrcpy(path, prevPath);
-        chdir(path);
-        printf("%s\n", getcwd(s, 100));
+            mystrcpy(current, replaceTildeWithHome(home, path));
+        if (equal("-", path) && prevPath)
+            mystrcpy(current, prevPath);
+        chdir(current);
+        getcwd(current, PATH_MAX);
+        printf("%s\n", current);
         path = strtok(NULL, " \n\t");
     }
+    mystrcpy(prevPath, beforeWarp);
 }

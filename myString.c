@@ -42,10 +42,10 @@ char *replaceHomeWithTilde(char *home, char *path)
 }
 char *replaceTildeWithHome(char *home, char *path)
 {
-    char *newPath = malloc(sizeof(char) * (PATH_MAX));
+    char *newPath = malloc(sizeof(char) * (PATH_MAX+1));
     int c = 0;
     mystrcpy(newPath, home);
-    for (int i = length(home); i <= length(path); i++)
+    for (int i = length(home); c <= length(path); i++)
     {
         newPath[i] = path[++c];
     }

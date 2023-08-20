@@ -3,7 +3,8 @@ int main()
 {
     char *home = homePath();
     char *prevPath = malloc(sizeof(char) * PATH_MAX);
-    mystrcpy(prevPath, home);
+    mystrcpy(prevPath, "\0");
+    
     while (1)
     {
         prompt(home);
