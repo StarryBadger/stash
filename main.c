@@ -9,8 +9,7 @@ int main()
     {
         prompt(home);
         char input[4096];
-        fgets(input, 4096, stdin);
-        if (prefix("warp", input))
-            warp(input, home, prevPath);
+        fgets(input, 4096, stdin);        
+        execute(input);
     }
 }

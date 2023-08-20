@@ -5,7 +5,7 @@ void warp(char *input, char *home, char *prevPath)
     char current[PATH_MAX];
     getcwd(beforeWarp, PATH_MAX);
     char *paths = removeSubstring("warp", input);
-    char *path = strtok(paths, " \n\t");
+    char *path = strtok(paths, " \n\t\r\v\f");
     if (path == NULL)
     {
         chdir(home);

@@ -12,4 +12,9 @@
 #include "prompt.h"
 #include "myString.h"
 #include "warp.h"
+#include "commands.h"
+
+#define MAX_COMMANDS 128
+
+
 #endif

@@ -21,3 +21,4 @@ void prompt(char *home)
     else
         printf("<%s@%s:%s>", username, hostname, path);
 }
+
