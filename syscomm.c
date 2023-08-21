@@ -1,11 +1,6 @@
 #include "headers.h"
 void sysexec(command *cmd)
 {
-    printf("%d\n",cmd->argc);
-    for (int i = 0; i < cmd->argc; i++)
-    {
-        printf("%s\n", cmd->argv[i]);
-    }
     if (cmd->foreground)
     {
         int child = fork();
@@ -26,6 +21,6 @@ void sysexec(command *cmd)
     }
     else
     {
-        
+
     }
 }
