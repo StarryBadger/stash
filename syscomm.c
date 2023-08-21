@@ -16,7 +16,7 @@ void sysexec(command *cmd)
         else
         {
             // error handling
-            //  perror("fork");
+             perror("fork");
         }
     }
     else
