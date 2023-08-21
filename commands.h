@@ -9,4 +9,5 @@ typedef struct command
 } command;
 command *commandify(char *str, bool stat);
 void execute(char*);
+void freeCommand(command *);
 #endif

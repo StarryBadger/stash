@@ -10,7 +10,7 @@ char *homePath()
 }
 int main()
 {
-    home=homePath();
+    home = homePath();
     while (1)
     {
         prompt();
@@ -18,4 +18,5 @@ int main()
         fgets(input, 4096, stdin);
         execute(input);
     }
+    free(home);
 }
