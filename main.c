@@ -1,15 +1,21 @@
 #include "headers.h"
+char *home;
+char *homePath()
+{
+    char cwd[4096];
+    getcwd(cwd, sizeof(cwd));
+    char *path = malloc(sizeof(char) * (length(cwd + 1)));
+    mystrcpy(path, cwd);
+    return path;
+}
 int main()
 {
-    char *home = homePath();
-    char *prevPath = malloc(sizeof(char) * PATH_MAX);
-    mystrcpy(prevPath, "\0");
-    
+    home=homePath();
     while (1)
     {
-        prompt(home);
+        prompt();
         char input[4096];
-        fgets(input, 4096, stdin);        
+        fgets(input, 4096, stdin);
         execute(input);
     }
 }

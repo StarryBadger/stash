@@ -8,11 +8,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+extern char *home;
 
 #include "prompt.h"
 #include "myString.h"
-#include "warp.h"
 #include "commands.h"
+#include "warp.h"
 
 #define MAX_COMMANDS 128
 

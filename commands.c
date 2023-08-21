@@ -11,7 +11,7 @@ command *commandify(char *str, bool stat)
         cmd->argc += 1;
         token = strtok(NULL, " \n\t\r\v\f");
     }
-    cmd->foreground=stat;
+    cmd->foreground = stat;
     return cmd;
 }
 void execute(char *input)
@@ -40,11 +40,11 @@ void execute(char *input)
     }
     for (int i = 0; i < tokenCount; i++)
     {
-        printf("%s %d\n", toExecuteStr[i], (int)foreground[i]);
+        // printf("%s %d\n", toExecuteStr[i], (int)foreground[i]);
     }
     for (int i = 0; i < tokenCount; i++)
     {
-        command *cmd = commandify(toExecuteStr[i],foreground[i]);
+        command *cmd = commandify(toExecuteStr[i], foreground[i]);
         if (cmd->argc)
         {
             toExecute[commandCount++] = cmd;
@@ -54,9 +54,11 @@ void execute(char *input)
             // free cmd
         }
     }
-    commandCount += 1;
     for (int i = 0; i < commandCount; i++)
     {
-        execvp(toExecute[i]->argv[0], toExecute[i]->argv);
+        if (equal(toExecute[i]->argv[0], "warp"))
+            warp(toExecute[i]);
+        else
+            execvp(toExecute[i]->argv[0], toExecute[i]->argv);
     }
 }

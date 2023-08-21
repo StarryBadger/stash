@@ -7,5 +7,6 @@ typedef struct command
     bool foreground; 
 
 } command;
+command *commandify(char *str, bool stat);
 void execute(char*);
 #endif

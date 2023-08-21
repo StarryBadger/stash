@@ -29,7 +29,7 @@ char *removeSubstring(char *substr, char *str)
     }
     return newstr;
 }
-char *replaceHomeWithTilde(char *home, char *path)
+char *replaceHomeWithTilde(char *path)
 {
     char *newPath = malloc(sizeof(char) * (100));
     int c = 0;
@@ -40,7 +40,7 @@ char *replaceHomeWithTilde(char *home, char *path)
     }
     return newPath;
 }
-char *replaceTildeWithHome(char *home, char *path)
+char *replaceTildeWithHome(char *path)
 {
     char *newPath = malloc(sizeof(char) * (PATH_MAX+1));
     int c = 0;
