@@ -3,19 +3,19 @@
 typedef struct command
 {
     int argc;
-    char *argv[256];
-    // char argv[256][256];
+    // char *argv[256];
+    char argv[128][128];
     bool foreground;
 
 } command;
 typedef struct commandList
 {
-    command *arr[PATH_MAX];
-    // command arr[PATH_MAX];
+    // command *arr[PATH_MAX];
+    command arr[20];
     int count;
 
 } commandList;
-command *commandify(char *str, bool stat);
+command commandify(char *str, bool stat);
 void execute(char *);
 void freeCommand(command *);
 #endif

@@ -42,7 +42,7 @@ void updatePastEvents()
         history[i].count = 0;
     }
     int count = 0;
-    // readPastEventsFromFile(history, &count);
+    readPastEventsFromFile(history, &count);
     historyCount = count;
 }
 void saveToHistory(commandList new)
@@ -55,26 +55,5 @@ void saveToHistory(commandList new)
 }
 void pastevents()
 {
-    for (int i = 0; i < historyCount; i++)
-    {
-        printf("Command List %d:\n", i + 1);
-        printf("Count: %d\n", history[i].count);
-
-        for (int j = 0; j < history[i].count; j++)
-        {
-            command *cmd = history[i].arr[j];
-            printf("Command %d:\n", j + 1);
-            printf("Argument Count: %d\n", cmd->argc);
-
-            printf("Arguments:");
-            for (int k = 0; k < cmd->argc; k++)
-            {
-                printf(" %s", cmd->argv[k]);
-            }
-            printf("\n");
-
-            printf("Foreground: %s\n", cmd->foreground ? "true" : "false");
-        }
-        printf("\n");
-    }
+    printf("%s\n",history[0].arr->argv[0]);
 }

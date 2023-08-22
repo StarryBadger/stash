@@ -11,7 +11,6 @@ char *homePath()
 int main()
 {
     home = homePath();
-    printf("1\n");
     updatePastEvents();
     while (1)
     {

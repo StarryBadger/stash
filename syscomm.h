@@ -1,5 +1,5 @@
 #ifndef __SYSCOMM_H
 #define __SYSCOMM_H
 
-void sysexec(command*);
+void sysexec(command);
 #endif
