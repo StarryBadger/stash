@@ -50,10 +50,11 @@ void saveToHistory(commandList new)
     for (int i = 14; i >= 1; i--)
         history[i] = history[i - 1];
     history[0] = new;
-    ++historyCount;
+    if (historyCount <= 14)
+        ++historyCount;
     savePastEventsToFile(history, historyCount);
 }
 void pastevents()
 {
-    printf("%s\n",history[0].arr->argv[0]);
+    printf("%s\n", history[0].arr->argv[0]);
 }

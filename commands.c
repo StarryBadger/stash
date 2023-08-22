@@ -14,12 +14,7 @@ command commandify(char *str, bool stat)
     cmd.foreground = stat;
     return cmd;
 }
-// void freeCommand(command *cmd)
-// {
-//     for (int i = 0; i < cmd->argc; i++)
-//         free(cmd->argv[i]);
-//     free(cmd);
-// }
+
 void execute(char *input)
 {
     int tokenCount = 0, commandCount = 0;
@@ -52,13 +47,15 @@ void execute(char *input)
         {
             toExecute.arr[commandCount++] = cmd;
         }
-        // else
-        //     freeCommand(cmd);
     }
     bool toSave = true;
     for (int i = 0; i < commandCount; i++)
     {
-        if (equal(toExecute.arr[i].argv[0], "warp"))
+        if (equal(toExecute.arr[i].argv[0], "proclore"))
+        {
+            proclore(toExecute.arr[i]);
+        }
+        else if (equal(toExecute.arr[i].argv[0], "warp"))
         {
             warp(toExecute.arr[i]);
         }
@@ -73,6 +70,9 @@ void execute(char *input)
             sysexec(toExecute.arr[i]);
         // free(toExecute.arr[i]); to be freed later
     }
+
     if (toSave)
+    {
         saveToHistory(toExecute);
+    }
 }

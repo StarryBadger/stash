@@ -21,6 +21,7 @@ extern int historyCount;
 #include "warp.h"
 #include "syscomm.h"
 #include "pastevents.h"
+#include "proclore.h"
 
 #define MAX_COMMANDS 128
 #define DEBUG     printf("1\n");
