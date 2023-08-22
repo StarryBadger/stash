@@ -24,7 +24,8 @@ void freeCommand(command *cmd)
 void execute(char *input)
 {
     int tokenCount = 0, commandCount = 0;
-    command *toExecute[MAX_COMMANDS];
+    commandList toExecute;
+    toExecute.count = 0;
     char *toExecuteStr[MAX_COMMANDS];
     bool foreground[MAX_COMMANDS];
     char inputCopy[4096];
@@ -49,16 +50,30 @@ void execute(char *input)
     {
         command *cmd = commandify(toExecuteStr[i], foreground[i]);
         if (cmd->argc)
-            toExecute[commandCount++] = cmd;
+        {
+            toExecute.arr[commandCount++] = cmd;
+        }
         else
             freeCommand(cmd);
     }
+    bool toSave = true;
     for (int i = 0; i < commandCount; i++)
     {
-        if (equal(toExecute[i]->argv[0], "warp"))
-            warp(toExecute[i]);
+        if (equal(toExecute.arr[i]->argv[0], "warp"))
+        {
+            warp(toExecute.arr[i]);
+        }
+        else if (equal(toExecute.arr[i]->argv[0], "pastevents"))
+        {
+            pastevents(toExecute.arr[i]);
+            if (!equal(toExecute.arr[i]->argv[1], "execute"))
+                toSave = false;
+                pastevents();
+        }
         else
-            sysexec(toExecute[i]);
-        free(toExecute[i]);
+            sysexec(toExecute.arr[i]);
+        // free(toExecute.arr[i]); to be freed later
     }
+    if (toSave)
+        saveToHistory(toExecute);
 }

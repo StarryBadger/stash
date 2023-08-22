@@ -12,14 +12,16 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "commands.h"
 extern char *home;
-
+extern commandList history[15];
+extern int historyCount;
 #include "prompt.h"
 #include "myString.h"
-#include "commands.h"
 #include "warp.h"
 #include "syscomm.h"
+#include "pastevents.h"
 
 #define MAX_COMMANDS 128
-
+#define DEBUG     printf("1\n");
 #endif
