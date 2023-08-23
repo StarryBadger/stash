@@ -13,16 +13,17 @@
 #include <fcntl.h>
 
 #include "commands.h"
-extern char *home;
-extern commandList history[15];
-extern int historyCount;
 #include "prompt.h"
 #include "myString.h"
 #include "warp.h"
 #include "syscomm.h"
 #include "pastevents.h"
 #include "proclore.h"
-
+extern char *home;
+extern commandList history[15];
+extern int historyCount;
+extern commandList pasteveexec;
+extern bool OLDPWD;
 #define MAX_COMMANDS 128
-#define DEBUG     printf("1\n");
+#define DEBUG printf("1\n");
 #endif

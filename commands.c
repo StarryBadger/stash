@@ -14,11 +14,55 @@ command commandify(char *str, bool stat)
     cmd.foreground = stat;
     return cmd;
 }
+// void executeSingleCommand(command cmd)
+// {
+//     if (equal(cmd.argv[0], "proclore"))
+//         {
+//             proclore(cmd);
+//         }
+//         else if (equal(cmd.argv[0], "warp"))
+//         {
+//             warp(cmd);
+//         }
+//         else if (equal(cmd.argv[0], "pastevents"))
+//         {
+//             toSave = false;
+//             pastevents(cmd);
+//             if (equal(cmd.argv[1], "execute"))
+//             {
+//                 if (toSave)
+//                 {
+//                     if (!toReplace)
+//                     {
+//                         toReplace = true;
+//                         modified.count = i - 1;
+//                         for (int j = 0; j < i; j++)
+//                         {
+//                             modified.arr[j] = toExecute.arr[j];
+//                         }
+//                     }
+//                     for (int j = 0; j < pasteveexec.count; j++)
+//                     {
+//                         modified.count += 1;
+//                         modified.arr[i + j] = pasteveexec.arr[j];
+//                     }
+//                 }
+//             }
 
+//             else
+//                 toSave = false;
+//         }
+//         else
+//             sysexec(toExecute.arr[i]);
+//         modified.arr[modified.count] = toExecute.arr[i];
+//         modified.count += 1;
+// }
 void execute(char *input)
 {
-    int tokenCount = 0, commandCount = 0;
+    int tokenCount = 0;
     commandList toExecute;
+    commandList modified;
+    toExecute.count = 0;
     toExecute.count = 0;
     char *toExecuteStr[MAX_COMMANDS];
     bool foreground[MAX_COMMANDS];
@@ -45,11 +89,11 @@ void execute(char *input)
         command cmd = commandify(toExecuteStr[i], foreground[i]);
         if (cmd.argc)
         {
-            toExecute.arr[commandCount++] = cmd;
+            toExecute.arr[toExecute.count++] = cmd;
         }
     }
-    bool toSave = true;
-    for (int i = 0; i < commandCount; i++)
+    bool toSave = true, toReplace = false;
+    for (int i = 0; i < toExecute.count; i++)
     {
         if (equal(toExecute.arr[i].argv[0], "proclore"))
         {
@@ -61,18 +105,43 @@ void execute(char *input)
         }
         else if (equal(toExecute.arr[i].argv[0], "pastevents"))
         {
-            // pastevents(toExecute.arr[i]);
-            if (!equal(toExecute.arr[i].argv[1], "execute"))
+            toSave = false;
+            pastevents(toExecute.arr[i]);
+            if (equal(toExecute.arr[i].argv[1], "execute"))
+            {
+                if (toSave)
+                {
+                    if (!toReplace)
+                    {
+                        toReplace = true;
+                        modified.count = i - 1;
+                        for (int j = 0; j < i; j++)
+                        {
+                            modified.arr[j] = toExecute.arr[j];
+                        }
+                    }
+                    for (int j = 0; j < pasteveexec.count; j++)
+                    {
+                        modified.count += 1;
+                        modified.arr[i + j] = pasteveexec.arr[j];
+                    }
+                }
+            }
+
+            else
                 toSave = false;
-            pastevents();
         }
         else
             sysexec(toExecute.arr[i]);
+        modified.arr[modified.count] = toExecute.arr[i];
+        modified.count += 1;
         // free(toExecute.arr[i]); to be freed later
     }
-
     if (toSave)
     {
-        saveToHistory(toExecute);
+        if (!toReplace)
+            saveToHistory(toExecute);
+        else
+            saveToHistory(modified);
     }
 }

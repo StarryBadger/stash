@@ -1,4 +1,5 @@
 #include "headers.h"
+bool OLDPWD = false;
 char prevPath[PATH_MAX] = "\0";
 void warp(command input)
 {
@@ -16,10 +17,18 @@ void warp(command input)
         if (prefix("~", current))
             mystrcpy(current, replaceTildeWithHome(current));
         if (equal("-", current) && prevPath != "\0")
-            mystrcpy(current, prevPath);
+        {
+            if (OLDPWD)
+                mystrcpy(current, prevPath);
+            else
+                fprintf(stderr, "warp: OLDPWD not set\n");
+        }
+        else
+            OLDPWD = true;
         chdir(current);
         getcwd(current, PATH_MAX);
-        printf("%s\n", current);
+        if (OLDPWD)
+            printf("%s\n", current);
         mystrcpy(prevPath, beforeWarp);
     }
 }
