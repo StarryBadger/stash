@@ -105,6 +105,7 @@ void pastevents(command cmd)
     }
     if (cmd.argc == 3 && equal(cmd.argv[1], "execute"))
     {
-        pasteveexec = history[atoi(cmd.argv[2]) - 1]; // error handle for not a number and invalid numbers
+        pasteveexec = history[atoi(cmd.argv[2]) - 1];
+        printCommandList(pasteveexec); // error handle for not a number and invalid numbers
     }
 }

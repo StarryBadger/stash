@@ -15,5 +15,6 @@ typedef struct commandList
 } commandList;
 command commandify(char *str, bool stat);
 void execute(char *);
-void freeCommand(command *);
+
+void executeCommand(commandList);
 #endif

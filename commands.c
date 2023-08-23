@@ -14,55 +14,10 @@ command commandify(char *str, bool stat)
     cmd.foreground = stat;
     return cmd;
 }
-// void executeSingleCommand(command cmd)
-// {
-//     if (equal(cmd.argv[0], "proclore"))
-//         {
-//             proclore(cmd);
-//         }
-//         else if (equal(cmd.argv[0], "warp"))
-//         {
-//             warp(cmd);
-//         }
-//         else if (equal(cmd.argv[0], "pastevents"))
-//         {
-//             toSave = false;
-//             pastevents(cmd);
-//             if (equal(cmd.argv[1], "execute"))
-//             {
-//                 if (toSave)
-//                 {
-//                     if (!toReplace)
-//                     {
-//                         toReplace = true;
-//                         modified.count = i - 1;
-//                         for (int j = 0; j < i; j++)
-//                         {
-//                             modified.arr[j] = toExecute.arr[j];
-//                         }
-//                     }
-//                     for (int j = 0; j < pasteveexec.count; j++)
-//                     {
-//                         modified.count += 1;
-//                         modified.arr[i + j] = pasteveexec.arr[j];
-//                     }
-//                 }
-//             }
-
-//             else
-//                 toSave = false;
-//         }
-//         else
-//             sysexec(toExecute.arr[i]);
-//         modified.arr[modified.count] = toExecute.arr[i];
-//         modified.count += 1;
-// }
 void execute(char *input)
 {
     int tokenCount = 0;
     commandList toExecute;
-    commandList modified;
-    toExecute.count = 0;
     toExecute.count = 0;
     char *toExecuteStr[MAX_COMMANDS];
     bool foreground[MAX_COMMANDS];
@@ -92,6 +47,11 @@ void execute(char *input)
             toExecute.arr[toExecute.count++] = cmd;
         }
     }
+    executeCommand(toExecute);
+}
+void executeCommand(commandList toExecute)
+{
+    commandList modified;
     bool toSave = true, toReplace = false;
     for (int i = 0; i < toExecute.count; i++)
     {
