@@ -51,8 +51,9 @@ void execute(char *input)
 }
 void executeCommand(commandList toExecute)
 {
-    commandList modified;
-    bool toSave = true, toReplace = false;
+    // commandList modified;
+    bool toSave = true;
+    // bool toReplace = false;
     for (int i = 0; i < toExecute.count; i++)
     {
         if (equal(toExecute.arr[i].argv[0], "proclore"))
@@ -67,41 +68,41 @@ void executeCommand(commandList toExecute)
         {
             toSave = false;
             pastevents(toExecute.arr[i]);
-            if (equal(toExecute.arr[i].argv[1], "execute"))
-            {
-                if (toSave)
-                {
-                    if (!toReplace)
-                    {
-                        toReplace = true;
-                        modified.count = i - 1;
-                        for (int j = 0; j < i; j++)
-                        {
-                            modified.arr[j] = toExecute.arr[j];
-                        }
-                    }
-                    for (int j = 0; j < pasteveexec.count; j++)
-                    {
-                        modified.count += 1;
-                        modified.arr[i + j] = pasteveexec.arr[j];
-                    }
-                }
-            }
+            // if (equal(toExecute.arr[i].argv[1], "execute"))
+            // {
+            //     if (toSave)
+            //     {
+            //         if (!toReplace)
+            //         {
+            //             toReplace = true;
+            //             modified.count = i - 1;
+            //             for (int j = 0; j < i; j++)
+            //             {
+            //                 modified.arr[j] = toExecute.arr[j];
+            //             }
+            //         }
+            //         for (int j = 0; j < pasteveexec.count; j++)
+            //         {
+            //             modified.count += 1;
+            //             modified.arr[i + j] = pasteveexec.arr[j];
+            //         }
+            //     }
+            // }
 
-            else
-                toSave = false;
+            // else
+            //     toSave = false;
         }
         else
             sysexec(toExecute.arr[i]);
-        modified.arr[modified.count] = toExecute.arr[i];
-        modified.count += 1;
+        // modified.arr[modified.count] = toExecute.arr[i];
+        // modified.count += 1;
         // free(toExecute.arr[i]); to be freed later
     }
     if (toSave)
     {
-        if (!toReplace)
+        // if (!toReplace)
             saveToHistory(toExecute);
-        else
-            saveToHistory(modified);
+        // else
+        //     saveToHistory(modified);
     }
 }

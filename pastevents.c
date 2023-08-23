@@ -77,8 +77,8 @@ void printCommandList(commandList cmdL)
     for (int i = 0; i < cmdL.count; i++)
     {
         printCommand(cmdL.arr[i], (i == cmdL.count - 1)); // second parameter true only for last element
-        printf("\n");
     }
+    printf("\n");
 }
 void pastevents(command cmd)
 {
@@ -103,9 +103,9 @@ void pastevents(command cmd)
             fclose(file);
         }
     }
-    if (cmd.argc == 3 && equal(cmd.argv[1], "execute"))
-    {
-        pasteveexec = history[atoi(cmd.argv[2]) - 1];
-        printCommandList(pasteveexec); // error handle for not a number and invalid numbers
-    }
+    // if (cmd.argc == 3 && equal(cmd.argv[1], "execute"))
+    // {
+    //     pasteveexec = history[atoi(cmd.argv[2]) - 1];
+    //     printCommandList(pasteveexec); // error handle for not a number and invalid numbers
+    // }
 }
