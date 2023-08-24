@@ -1,5 +1,5 @@
 #include "headers.h"
-bool OLDPWD = false;
+bool OLDPWDWARP = false;
 char prevPath[PATH_MAX] = "\0";
 void warp(command input)
 {
@@ -9,7 +9,7 @@ void warp(command input)
     {
         chdir(home);
         printf("%s\n", home);
-        OLDPWD=true;
+        OLDPWDWARP=true;
     }
     for (int i = 1; i < input.argc; i++)
     {
@@ -19,14 +19,14 @@ void warp(command input)
             mystrcpy(current, replaceTildeWithHome(current));
         if (equal("-", current) && prevPath != "\0")
         {
-            if (OLDPWD)
+            if (OLDPWDWARP)
                 mystrcpy(current, prevPath);
             else
-                fprintf(stderr, "warp: OLDPWD not set\n");
+                fprintf(stderr, "warp: OLDPWDWARP not set\n");
         }
         else
         {
-            OLDPWD = true;
+            OLDPWDWARP = true;
         }
         chdir(current);
         getcwd(current, PATH_MAX);

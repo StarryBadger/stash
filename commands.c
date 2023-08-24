@@ -65,11 +65,11 @@ void executeCommand(commandList toExecute)
         {
             warp(toExecute.arr[i]);
         }
-        else if (!equal(toExecute.arr[i].argv[0], "pastevents"))
+        else if (equal(toExecute.arr[i].argv[0], "peek"))
         {
-            sysexec(toExecute.arr[i]);
+            peek(toExecute.arr[i]);
         }
-        else
+        else if (equal(toExecute.arr[i].argv[0], "pastevents"))
         {
             pastevents(toExecute.arr[i]);
             if (equal(toExecute.arr[i].argv[1], "execute"))
@@ -88,6 +88,10 @@ void executeCommand(commandList toExecute)
             {
                 toSave = false;
             }
+        }
+        else
+        {
+            sysexec(toExecute.arr[i]);
         }
         if (!toReplace)
         {
