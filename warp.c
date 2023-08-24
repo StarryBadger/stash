@@ -3,7 +3,6 @@ bool OLDPWD = false;
 char prevPath[PATH_MAX] = "\0";
 void warp(command input)
 {
-    printf("yo %d\n",(int)OLDPWD);
     char beforeWarp[PATH_MAX];
     char current[PATH_MAX];
     if (input.argc == 1)
@@ -31,11 +30,7 @@ void warp(command input)
         }
         chdir(current);
         getcwd(current, PATH_MAX);
-        if (OLDPWD)
-        {
-            printf("changed lol %d\n",(int)OLDPWD);
-        }
         mystrcpy(prevPath, beforeWarp);
+        printf("%s\n", home);
     }
-    printf("Bro%d\n",(int)OLDPWD);
 }

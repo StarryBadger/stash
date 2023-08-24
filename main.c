@@ -11,7 +11,7 @@ char *homePath()
 int main()
 {
     home = homePath();
-    updatePastEvents();
+    readPastEventsFromFile(history, &historyCount);
     while (1)
     {
         prompt();
