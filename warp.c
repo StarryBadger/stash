@@ -9,7 +9,7 @@ void warp(command input)
     {
         chdir(home);
         printf("%s\n", home);
-        OLDPWDWARP=true;
+        OLDPWDWARP = true;
     }
     for (int i = 1; i < input.argc; i++)
     {
@@ -26,15 +26,16 @@ void warp(command input)
                 fprintf(stderr, "\x1b[31mwarp: OLDPWD not set\n\x1b[0m");
                 return;
             }
-
         }
         else
         {
             OLDPWDWARP = true;
         }
-        if (chdir(current)==-1)
-        fprintf(stderr,"\x1b[31mwarp: No such file or directory\n\x1b[0m");
-        return;
+        if (chdir(current) == -1)
+        {
+            fprintf(stderr, "\x1b[31mwarp: No such file or directory\n\x1b[0m");
+            return;
+        }
         getcwd(current, PATH_MAX);
         mystrcpy(prevPath, beforeWarp);
         printf("%s\n", current);
