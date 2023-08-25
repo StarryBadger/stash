@@ -109,7 +109,6 @@ void seek(command cmd)
     {
         mystrcpy(path, replaceTildeWithHome(path));
     }
-    printf("%d %d %d %s %s\n", F, D, E, path, target);
     pathlength = length(path);
     lookFor(&D, &F, target, path);
     if (foundcount == 0)

@@ -76,7 +76,11 @@ void executeCommand(commandList toExecute)
         else if (equal(toExecute.arr[i].argv[0], "pastevents"))
         {
             pastevents(toExecute.arr[i]);
-            if (equal(toExecute.arr[i].argv[1], "execute"))
+            if (toExecute.arr[i].argc == 1 || !equal(toExecute.arr[i].argv[1], "execute"))
+            {
+                toSave = false;
+            }
+            else
             {
                 toReplace = true;
                 if (toSave)
@@ -88,16 +92,12 @@ void executeCommand(commandList toExecute)
                     }
                 }
             }
-            else
-            {
-                toSave = false;
-            }
         }
         else
         {
             sysexec(toExecute.arr[i]);
         }
-        if (!toReplace)
+        if (toSave && (toExecute.arr[i].argc < 2 || !equal(toExecute.arr[i].argv[1], "execute")))
         {
             modified.arr[modified.count] = toExecute.arr[i];
             modified.count += 1;
@@ -113,6 +113,9 @@ void executeCommand(commandList toExecute)
         else
         {
             saveToHistory(modified);
+            {
+                toSave = false;
+            }
         }
     }
 }

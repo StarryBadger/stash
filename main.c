@@ -1,4 +1,5 @@
 #include "headers.h"
+PtrNode bglist;
 char *home;
 char timetaker[PATH_MAX];
 int timetakertime;
@@ -12,6 +13,7 @@ char *homePath()
 }
 int main()
 {
+    bglist = initializeList();
     mystrcpy(timetaker, "\0");
     timetakertime = 0;
     home = homePath();

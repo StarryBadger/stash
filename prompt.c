@@ -13,10 +13,10 @@ void prompt()
     }
     if (timetakertime > 2)
     {
-        printf("<%s@%s:%s %s : %ds> ", username, hostname, path,timetaker,timetakertime);
+        printf("<\x1b[32m%s@%s\x1b[0m:\x1b[34m%s %s:%ds\x1b[0m> ", username, hostname, path,timetaker,timetakertime);
     }
     else
     {
-        printf("<%s@%s:%s> ", username, hostname, path);
+        printf("<\x1b[32m%s@%s\x1b[0m:\x1b[34m%s\x1b[0m> ", username, hostname, path);
     }
 }
