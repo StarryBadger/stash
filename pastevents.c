@@ -98,10 +98,13 @@ void printCommand(command cmd, int last)
 	{
 		printf("%s ", cmd.argv[i]);
 	}
-	if (cmd.foreground && !last)
-		printf("; ");
-	else if (!cmd.foreground)
-		printf("& ");
+	if (!last)
+	{
+		if (cmd.foreground)
+			printf("; ");
+		else
+			printf("& ");
+	}
 }
 void printCommandList(commandList cmdL)
 {
@@ -130,7 +133,16 @@ void pastevents(command cmd)
 	}
 	if (cmd.argc == 3 && equal(cmd.argv[1], "execute"))
 	{
-		pasteveexec = history[atoi(cmd.argv[2]) - 1]; // error handle for not a number and invalid numbers
-		executeCommand(pasteveexec);
+		int n = myatoi(cmd.argv[2]) - 1;
+		if (n == -1 || n >= historyCount)
+		{
+			DEBUG
+			// error handling
+		}
+		else
+		{
+			pasteveexec = history[n]; // error handle for not a number and invalid numbers
+			executeCommand(pasteveexec);
+		}
 	}
 }

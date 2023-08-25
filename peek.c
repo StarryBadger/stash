@@ -1,5 +1,21 @@
 #include "headers.h"
 struct dirent **namelist;
+off_t total_block_size = 0;
+void totalBlockSize(char *path, const char *filename)
+{
+    char temp[PATH_MAX];
+    strcpy(temp, path);
+    if (temp[strlen(temp) - 1] != '/')
+        strcat(temp, "/");
+    strcat(temp, filename);
+    struct stat statInfo;
+    if (lstat(temp, &statInfo) == -1)
+    {
+        perror("lstat");
+        return;
+    }
+    total_block_size+=statInfo.st_blocks;
+}
 void peekL(char *path, const char *filename)
 {
     char temp[PATH_MAX];
@@ -29,10 +45,9 @@ void peekL(char *path, const char *filename)
     printf((statInfo.st_mode & S_IROTH) ? "r" : "-");
     printf((statInfo.st_mode & S_IWOTH) ? "w" : "-");
     printf((statInfo.st_mode & S_IXOTH) ? "x" : "-");
-
     printf(" %2lu ", statInfo.st_nlink);
     printf("%s %s ", userInfo->pw_name, grInfo->gr_name);
-    printf("%6lld ", (long long)statInfo.st_size);
+    printf("%8lld ", (long long)statInfo.st_size);
     time_t currentTime = time(NULL);
     struct tm *fileTime = localtime(&statInfo.st_mtime);
     struct tm *currentTimeStruct = localtime(&currentTime);
@@ -95,6 +110,7 @@ void setFlags(char *flags, bool *L, bool *A)
 }
 void peek(command cmd)
 {
+    total_block_size = 0;
     bool L = false, A = false;
     char path[PATH_MAX];
     if (cmd.argc == 1)
@@ -161,15 +177,16 @@ void peek(command cmd)
         if (length(namelist[i]->d_name) > maxLength)
             maxLength = length(namelist[i]->d_name);
     }
-    struct stat dir_stat;
-    if (stat(path, &dir_stat) == -1)
-    {
-        perror("stat");
-    }
-    off_t total_block_size = dir_stat.st_blocks * 512;
     if (L)
     {
-        printf("Total %d\n", total_block_size);
+        for (int i = 0; i < n; ++i)
+        {
+            if (!A && prefix(".", namelist[i]->d_name))
+                continue;
+            totalBlockSize(path, namelist[i]->d_name);
+        }
+        total_block_size/=2;
+        printf("total %4lu\n", total_block_size);
     }
     for (int i = 0; i < n; ++i)
     {

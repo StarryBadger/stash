@@ -23,6 +23,7 @@
 #include "myString.h"
 #include "warp.h"
 #include "peek.h"
+#include "seek.h"
 #include "syscomm.h"
 #include "pastevents.h"
 #include "proclore.h"
@@ -32,6 +33,7 @@ extern commandList history[15];
 extern int historyCount;
 extern commandList pasteveexec;
 extern bool OLDPWDWARP;
+extern off_t total_block_size;
 
 #define MAX_COMMANDS 128
 #define DEBUG printf("1");

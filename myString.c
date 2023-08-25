@@ -42,7 +42,7 @@ char *replaceHomeWithTilde(char *path)
 }
 char *replaceTildeWithHome(char *path)
 {
-    char *newPath = malloc(sizeof(char) * (PATH_MAX+1));
+    char *newPath = malloc(sizeof(char) * (PATH_MAX + 1));
     int c = 0;
     mystrcpy(newPath, home);
     for (int i = length(home); c <= length(path); i++)
@@ -69,4 +69,18 @@ bool equal(char *a, char *b)
             return false;
         i++;
     }
+}
+int myatoi(char *str)
+{
+    int n = 0;
+    for (int i = 0; i < length(str); i++)
+    {
+
+        int num = (int)str[i] - 48;
+        if (num >= 0 && num <= 9)
+            n = n * 10 + num;
+        else
+            return -1;
+    }
+    return n;
 }

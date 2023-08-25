@@ -9,8 +9,11 @@ void proclore(command cmd)
     if (cmd.argc == 2)
     {
         
-        pid = atoi(cmd.argv[1]);
-        //error handling if not int
+        pid = myatoi(cmd.argv[1]);
+        if (pid==-1)
+        {
+            
+        }
     }
     else
     {

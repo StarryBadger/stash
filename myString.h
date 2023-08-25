@@ -7,4 +7,5 @@ char *replaceTildeWithHome(char *);
 char *mystrcpy(char *, char *);
 char *removeSubstring(char *, char *);
 bool equal(char *, char *);
+int myatoi(char *str);
 #endif

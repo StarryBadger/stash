@@ -31,6 +31,6 @@ void warp(command input)
         chdir(current);
         getcwd(current, PATH_MAX);
         mystrcpy(prevPath, beforeWarp);
-        printf("%s\n", home);
+        printf("%s\n", current);
     }
 }
