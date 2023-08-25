@@ -110,6 +110,7 @@ void seek(command cmd)
     if (F && D)
     {
         fprintf(stderr, "\x1b[31mseek: Invalid flags\x1b[0m");
+        return;
     }
     if (prefix("~", path))
     {
