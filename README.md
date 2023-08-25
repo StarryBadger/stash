@@ -54,4 +54,5 @@
 - Commands followed by erronous commands separated by `;` or `&` are executed
 - When a prompt takes >2 seconds to execute, the name of the first command is displayed (as we were allowed to display anything with proper assumptions and this felt the most aethetically pleasing)
 - error messages due to functions defined in C, like, perror messages are not displayed in red.
+- Assumptions have been made for path lengths to be PATH_MAX/PATH_MAX-1 as well as that only be 50 commands in one prompt, each with max 128 paramters and each parameter with max 127 characters.
 
