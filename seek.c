@@ -63,7 +63,7 @@ void lookFor(bool *D, bool *F, char *target, char *path)
         }
         else if (S_ISREG(st.st_mode) && F)
         {
-            if (equalNameWithExtension(entry->d_name, target))
+            if (equal(entry->d_name, target)|| equalNameWithExtension(entry->d_name, target))
             {
                 printf(GREEN ".%s\n" RESET, pathBranch + pathlength);
                 foundcount++;
@@ -104,7 +104,6 @@ void seek(command cmd)
         F = true;
         D = true;
     }
-    DEBUG
     if (prefix("~", path))
     {
         mystrcpy(path, replaceTildeWithHome(path));

@@ -40,6 +40,8 @@ extern char executeMe[PATH_MAX];
 extern int pathlength;
 extern char timetaker[PATH_MAX];
 extern int timetakertime;
+extern PtrNode bglist;
+
 #define MAX_COMMANDS 128
 #define DEBUG printf("1\n");
 #define GREEN "\x1b[32m"

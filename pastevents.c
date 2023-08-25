@@ -8,7 +8,12 @@ int historyCount = 0;
 commandList pasteveexec;
 void savePastEventsToFile(commandList *cmdarr, int commandCount)
 {
-	FILE *file = fopen("history", "wb");
+	char path[PATH_MAX];
+	mystrcpy(path, home);
+	if (path[length(path) - 1] != '/')
+		strcat(path, "/");
+	strcat(path, "history");
+	FILE *file = fopen(path, "wb");
 	if (file == NULL)
 	{
 		// perror("Failed to open file for writing");
@@ -25,7 +30,12 @@ void savePastEventsToFile(commandList *cmdarr, int commandCount)
 }
 void readPastEventsFromFile(commandList *cmdarr, int *commandCount)
 {
-	FILE *file = fopen("history", "rb");
+	char path[PATH_MAX];
+	mystrcpy(path, home);
+	if (path[length(path) - 1] != '/')
+		strcat(path, "/");
+	strcat(path, "history");
+	FILE *file = fopen(path, "rb");
 	if (file == NULL)
 	{
 		// error handling
@@ -136,11 +146,10 @@ void pastevents(command cmd)
 		int n = myatoi(cmd.argv[2]) - 1;
 		if (n == -1 || n >= historyCount)
 		{
-			DEBUG
 			// error handling
 		}
 		else
-		{
+		{	
 			pasteveexec = history[n]; // error handle for not a number and invalid numbers
 			executeCommand(pasteveexec);
 		}

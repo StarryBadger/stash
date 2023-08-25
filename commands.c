@@ -23,13 +23,13 @@ void execute(char *input)
     bool foreground[MAX_COMMANDS];
     char inputCopy[4096];
     mystrcpy(inputCopy, input);
-    char *token = strtok(inputCopy, "$;\n");
+    char *token = strtok(inputCopy, "&;\n");
     while (token != NULL)
     {
         char *curr = malloc(sizeof(char) * length(token) + 1);
         mystrcpy(curr, token);
         toExecuteStr[tokenCount++] = curr;
-        token = strtok(NULL, "$;\n");
+        token = strtok(NULL, "&;\n");
     }
     for (int i = 0; i < tokenCount; i++)
     {
@@ -57,6 +57,11 @@ void executeCommand(commandList toExecute)
     bool toReplace = false;
     for (int i = 0; i < toExecute.count; i++)
     {
+        if (toSave && (toExecute.arr[i].argc < 2 || !equal(toExecute.arr[i].argv[1], "execute")))
+        {
+            modified.arr[modified.count] = toExecute.arr[i];
+            modified.count += 1;
+        }
         if (equal(toExecute.arr[i].argv[0], "proclore"))
         {
             proclore(toExecute.arr[i]);
@@ -97,12 +102,6 @@ void executeCommand(commandList toExecute)
         {
             sysexec(toExecute.arr[i]);
         }
-        if (toSave && (toExecute.arr[i].argc < 2 || !equal(toExecute.arr[i].argv[1], "execute")))
-        {
-            modified.arr[modified.count] = toExecute.arr[i];
-            modified.count += 1;
-        }
-        // free(toExecute.arr[i]); to be freed later
     }
     if (toSave)
     {

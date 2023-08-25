@@ -28,3 +28,43 @@ void insertNode(Node *head, char *name, int value)
     }
     current->next = newNode;
 }
+// pid_t tokill
+// while (tokill=waitpid(child, &status, 0))>0
+// print-killed
+void removeNode(struct Node *head, int valueToRemove)
+{
+    struct Node *current = head;
+    struct Node *previous = NULL;
+    while (current != NULL)
+    {
+        if (current->value == valueToRemove)
+        {
+            printf("%s exited normally (%d)\n", current->name, current->value);
+            if (previous == NULL)
+            {
+                head = current->next;
+            }
+            else
+            {
+                previous->next = current->next;
+            }
+            struct Node *temp = current;
+            current = current->next;
+            free(temp);
+        }
+        else
+        {
+            previous = current;
+            current = current->next;
+        }
+    }
+}
+void findKilled()
+{
+    pid_t killed;
+    int status;
+    while ((killed = waitpid(-1, &status,WNOHANG)) > 0)
+    {
+        removeNode(bglist, killed);
+    }
+}

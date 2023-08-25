@@ -23,6 +23,7 @@ int main()
         prompt();
         char input[4096];
         fgets(input, 4096, stdin);
+        findKilled();
         time_t beforeCode;
         time(&beforeCode);
         execute(input);

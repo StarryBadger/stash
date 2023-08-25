@@ -14,7 +14,7 @@ void totalBlockSize(char *path, const char *filename)
         perror("lstat");
         return;
     }
-    total_block_size+=statInfo.st_blocks;
+    total_block_size += statInfo.st_blocks;
 }
 void peekL(char *path, const char *filename)
 {
@@ -65,7 +65,7 @@ void peekL(char *path, const char *filename)
 
     if (S_ISDIR(statInfo.st_mode))
         printf(BLUE "%s" RESET, filename);
-    else if (statInfo.st_mode & S_IXUSR)
+    else if (S_IXUSR & statInfo.st_mode)
         printf(GREEN "%s" RESET, filename);
     else
         printf(WHITE "%s" RESET, filename);
@@ -185,7 +185,7 @@ void peek(command cmd)
                 continue;
             totalBlockSize(path, namelist[i]->d_name);
         }
-        total_block_size/=2;
+        total_block_size /= 2;
         printf("total %4lu\n", total_block_size);
     }
     for (int i = 0; i < n; ++i)
