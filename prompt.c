@@ -9,8 +9,14 @@ void prompt()
     gethostname(hostname, sizeof(hostname));
     if (prefix(home, path))
     {
-        printf("<%s@%s:%s>", username, hostname, replaceHomeWithTilde(path));
+        strcpy(path, replaceHomeWithTilde(path));
+    }
+    if (timetakertime > 2)
+    {
+        printf("<%s@%s:%s %s : %ds> ", username, hostname, path,timetaker,timetakertime);
     }
     else
-        printf("<%s@%s:%s>", username, hostname, path);
+    {
+        printf("<%s@%s:%s> ", username, hostname, path);
+    }
 }
