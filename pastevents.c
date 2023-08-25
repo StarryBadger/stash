@@ -38,7 +38,7 @@ void readPastEventsFromFile(commandList *cmdarr, int *commandCount)
 	FILE *file = fopen(path, "rb");
 	if (file == NULL)
 	{
-		fprintf(stderr,"\x1b[31mHistory unavailable\n\x1b[0m");
+		fprintf(stderr, "\x1b[31mHistory unavailable\n\x1b[0m");
 		return;
 	}
 	fread(commandCount, sizeof(int), 1, file);
@@ -129,26 +129,36 @@ void pastevents(command cmd)
 			printCommandList(history[i]);
 		}
 	}
-	if (cmd.argc == 2 && (equal(cmd.argv[1], "purge")))
-	{
+	if (cmd.argc == 2)
+		if ((equal(cmd.argv[1], "purge")))
 		{
-			FILE *file = fopen("history", "w");
-			historyCount = 0;
-			savePastEventsToFile(history, historyCount);
-		}
-	}
-	if (cmd.argc == 3 && equal(cmd.argv[1], "execute"))
-	{
-		int n = myatoi(cmd.argv[2]) - 1;
-		if (n == -1 || n >= historyCount)
-		{
-			fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m",cmd.argv[2]);
-			return;
+			{
+				FILE *file = fopen("history", "w");
+				historyCount = 0;
+				savePastEventsToFile(history, historyCount);
+			}
 		}
 		else
 		{
-			pasteveexec = history[n];
-			executeCommand(pasteveexec);
+			fprintf(stderr, "\x1b[31mpastevents: Invalid arguments\n\x1b[0m");
 		}
-	}
+	if (cmd.argc == 3)
+		if (equal(cmd.argv[1], "execute"))
+		{
+			int n = myatoi(cmd.argv[2]) - 1;
+			if (n == -1 || n >= historyCount)
+			{
+				fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m", cmd.argv[2]);
+				return;
+			}
+			else
+			{
+				pasteveexec = history[n];
+				executeCommand(pasteveexec);
+			}
+		}
+		else
+		{
+			fprintf(stderr, "\x1b[31mpastevents: Invalid arguments\n\x1b[0m");
+		}
 }
