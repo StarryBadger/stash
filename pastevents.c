@@ -108,13 +108,10 @@ void printCommand(command cmd, int last)
 	{
 		printf("%s ", cmd.argv[i]);
 	}
-	if (!last)
-	{
-		if (cmd.foreground)
-			printf("; ");
-		else
-			printf("& ");
-	}
+	if (cmd.foreground && !last)
+		printf("; ");
+	else
+		printf("& ");
 }
 void printCommandList(commandList cmdL)
 {
@@ -149,7 +146,7 @@ void pastevents(command cmd)
 			// error handling
 		}
 		else
-		{	
+		{
 			pasteveexec = history[n]; // error handle for not a number and invalid numbers
 			executeCommand(pasteveexec);
 		}

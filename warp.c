@@ -22,7 +22,7 @@ void warp(command input)
             if (OLDPWDWARP)
                 mystrcpy(current, prevPath);
             else
-                fprintf(stderr, "warp: OLDPWDWARP not set\n");
+                fprintf(stderr, "warp: OLDPWD not set\n");
         }
         else
         {
@@ -31,6 +31,7 @@ void warp(command input)
         chdir(current);
         getcwd(current, PATH_MAX);
         mystrcpy(prevPath, beforeWarp);
+        if (OLDPWDWARP)
         printf("%s\n", current);
     }
 }

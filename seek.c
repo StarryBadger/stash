@@ -16,10 +16,14 @@ bool setSeekFlags(char *input, bool *F, bool *E, bool *D)
             if (input[i] == 'f')
             {
                 *F = true;
+                if (*D)
+                    fprintf(stderr, "seek: Invalid flags");
             }
             else if (input[i] == 'd')
             {
                 *D = true;
+                if (*F)
+                    fprintf(stderr, "seek: Invalid flags");
             }
             else if (input[i] == 'e')
             {
@@ -63,7 +67,7 @@ void lookFor(bool *D, bool *F, char *target, char *path)
         }
         else if (S_ISREG(st.st_mode) && F)
         {
-            if (equal(entry->d_name, target)|| equalNameWithExtension(entry->d_name, target))
+            if (equal(entry->d_name, target) || equalNameWithExtension(entry->d_name, target))
             {
                 printf(GREEN ".%s\n" RESET, pathBranch + pathlength);
                 foundcount++;
@@ -87,7 +91,7 @@ void seek(command cmd)
     --i;
     if (i == cmd.argc)
     {
-        // error, no target
+        fprintf(stderr, "seek: No target file/directory\n");
         return;
     }
     mystrcpy(target, cmd.argv[i]);
@@ -97,7 +101,8 @@ void seek(command cmd)
         getcwd(path, PATH_MAX - 1);
     if (i != cmd.argc - 1)
     {
-        // error multiple paths
+        fprintf(stderr, "seek: Multiple file paths detected\n");
+        return;
     }
     if (!F && !D)
     {
@@ -129,18 +134,20 @@ void seek(command cmd)
                 FILE *file = fopen(executeMe, "r");
                 if (file == NULL)
                 {
-                    perror("Error opening file");
+                    fprintf(stderr, "seek: can't open file: Permission denied\n");
                     return;
                 }
                 char ch;
                 while ((ch = fgetc(file)) != EOF)
                     putchar(ch);
+                printf("\n");
                 fclose(file);
             }
         }
-        else
+        else if (foundcount > 2)
         {
-            // error
+            fprintf(stderr, "seek: can't execute more than one file/directory\n");
+            return;
         }
     }
 }
