@@ -109,7 +109,7 @@ void printCommand(command cmd, int last)
 	}
 	if (cmd.foreground && !last)
 		printf("; ");
-	else
+	if (!cmd.foreground)
 		printf("& ");
 }
 void printCommandList(commandList cmdL)
