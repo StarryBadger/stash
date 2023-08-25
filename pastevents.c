@@ -16,9 +16,8 @@ void savePastEventsToFile(commandList *cmdarr, int commandCount)
 	FILE *file = fopen(path, "wb");
 	if (file == NULL)
 	{
-		// perror("Failed to open file for writing");
-		// error handling
-		// return;
+		fprintf(stderr, "\x1b[31mHistory unavailable\n\x1b[0m");
+		return;
 	}
 	fwrite(&commandCount, sizeof(int), 1, file);
 	for (int i = 0; i < commandCount; i++)
@@ -94,11 +93,6 @@ void saveToHistory(commandList new)
 	}
 	historyCount = MIN(15, historyCount + 1);
 	history[0] = new;
-	// for (int i = 0; i < historyCount; i++)
-	// {
-	// 	printCommandList(history[i]);
-	// }
-
 	savePastEventsToFile(history, historyCount);
 }
 void printCommand(command cmd, int last)
@@ -141,6 +135,7 @@ void pastevents(command cmd)
 		else
 		{
 			fprintf(stderr, "\x1b[31mpastevents: Invalid arguments\n\x1b[0m");
+			return;
 		}
 	if (cmd.argc == 3)
 		if (equal(cmd.argv[1], "execute"))
@@ -160,5 +155,6 @@ void pastevents(command cmd)
 		else
 		{
 			fprintf(stderr, "\x1b[31mpastevents: Invalid arguments\n\x1b[0m");
+			return;
 		}
 }
