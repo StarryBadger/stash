@@ -10,7 +10,6 @@ command commandify(char *str, bool stat)
         cmd.argc += 1;
         token = strtok(NULL, " \n\t\r\v\f");
     }
-    // cmd.argv[cmd.argc] = NULL; MAKE NULL FOR EXECVP LATER
     cmd.foreground = stat;
     return cmd;
 }

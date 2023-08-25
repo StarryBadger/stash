@@ -22,8 +22,8 @@ void sysexec(command cmd)
         }
         else
         {
-            // error handling
             perror("fork");
+            return;
         }
     }
     else
@@ -41,8 +41,7 @@ void sysexec(command cmd)
         else
         {
             perror("fork");
-            // continue;
+            return;
         }
-        // execvp(command[0],command);
     }
 }

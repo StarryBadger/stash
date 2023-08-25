@@ -4,7 +4,7 @@ Node *createNode(char *name, int value)
     Node *newNode = (Node *)malloc(sizeof(Node));
     if (newNode == NULL)
     {
-        fprintf(stderr, "Could not create background process list\n");
+        fprintf(stderr, "\x1b[31mCould not create background process list\n\x1b[0m");
         exit(EXIT_FAILURE);
     }
     mystrcpy(newNode->name, name);
@@ -28,9 +28,6 @@ void insertNode(Node *head, char *name, int value)
     }
     current->next = newNode;
 }
-// pid_t tokill
-// while (tokill=waitpid(child, &status, 0))>0
-// print-killed
 void removeNode(struct Node *head, int valueToRemove)
 {
     struct Node *current = head;

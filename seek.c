@@ -16,14 +16,10 @@ bool setSeekFlags(char *input, bool *F, bool *E, bool *D)
             if (input[i] == 'f')
             {
                 *F = true;
-                if (*D)
-                    fprintf(stderr, "seek: Invalid flags");
             }
             else if (input[i] == 'd')
             {
                 *D = true;
-                if (*F)
-                    fprintf(stderr, "seek: Invalid flags");
             }
             else if (input[i] == 'e')
             {
@@ -57,7 +53,7 @@ void lookFor(bool *D, bool *F, char *target, char *path)
             continue;
         if (S_ISDIR(st.st_mode))
         {
-            if (equal(entry->d_name, target) && D)
+            if (equal(entry->d_name, target) && !*F)
             {
                 printf(BLUE ".%s\n" RESET, pathBranch + pathlength);
                 foundcount++;
@@ -65,7 +61,7 @@ void lookFor(bool *D, bool *F, char *target, char *path)
             }
             lookFor(D, F, target, pathBranch);
         }
-        else if (S_ISREG(st.st_mode) && F)
+        else if (S_ISREG(st.st_mode) && !*D)
         {
             if (equal(entry->d_name, target) || equalNameWithExtension(entry->d_name, target))
             {
@@ -81,33 +77,39 @@ void seek(command cmd)
 {
     foundcount = 0;
     bool F = false, E = false, D = false;
+    bool targetset = false;
     char target[PATH_MAX], path[PATH_MAX];
     int i = 1;
-    while (setSeekFlags(cmd.argv[i++], &F, &E, &D))
+    for (int i = 1; i < cmd.argc; i++)
     {
-        if (i == cmd.argc)
+        if (setSeekFlags(cmd.argv[i], &F, &E, &D))
+            continue;
+        strcpy(target, cmd.argv[i]);
+        targetset = true;
+        if (i == cmd.argc - 1)
+        {
+            getcwd(path, PATH_MAX - 1);
             break;
+        }
+        else
+        {
+            mystrcpy(path, cmd.argv[i + 1]);
+            break;
+        }
+        if (i + 1 != cmd.argc - 1)
+        {
+            fprintf(stderr, "\x1b[31mseek: Multiple file paths detected\n\x1b[0m");
+            return;
+        }
     }
-    --i;
-    if (i == cmd.argc)
+    if (!targetset)
     {
-        fprintf(stderr, "seek: No target file/directory\n");
+        fprintf(stderr, "\x1b[31mseek: No target file/directory\n\x1b[0m");
         return;
     }
-    mystrcpy(target, cmd.argv[i]);
-    if (i != cmd.argc - 1)
-        mystrcpy(path, cmd.argv[++i]);
-    else
-        getcwd(path, PATH_MAX - 1);
-    if (i != cmd.argc - 1)
+    if (F && D)
     {
-        fprintf(stderr, "seek: Multiple file paths detected\n");
-        return;
-    }
-    if (!F && !D)
-    {
-        F = true;
-        D = true;
+        fprintf(stderr, "\x1b[31mseek: Invalid flags\x1b[0m");
     }
     if (prefix("~", path))
     {
@@ -134,19 +136,18 @@ void seek(command cmd)
                 FILE *file = fopen(executeMe, "r");
                 if (file == NULL)
                 {
-                    fprintf(stderr, "seek: can't open file: Permission denied\n");
+                    perror("Error opening file");
                     return;
                 }
                 char ch;
                 while ((ch = fgetc(file)) != EOF)
                     putchar(ch);
-                printf("\n");
                 fclose(file);
             }
         }
         else if (foundcount > 2)
         {
-            fprintf(stderr, "seek: can't execute more than one file/directory\n");
+            fprintf(stderr, "\x1b[31mseek: can't execute more than one file/directory\n\x1b[0m");
             return;
         }
     }

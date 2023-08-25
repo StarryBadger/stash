@@ -4,15 +4,17 @@ void proclore(command cmd)
     int pid;
     if (cmd.argc > 2)
     {
-        // throw error
+        fprintf(stderr, "\x1b[31mproclore: Too many arguments\n\x1b[0m");
+        return;
     }
     if (cmd.argc == 2)
     {
-        
+
         pid = myatoi(cmd.argv[1]);
-        if (pid==-1)
+        if (pid == -1)
         {
-            
+            fprintf(stderr, "\x1b[31mproclore: Invalid process ID\n\x1b[0m");
+            return;
         }
     }
     else
@@ -25,7 +27,7 @@ void proclore(command cmd)
     if (file == NULL)
     {
         perror("Failed to open stat file");
-        // error handling
+        return;
     }
     int pgrp;
     char state;
@@ -37,7 +39,6 @@ void proclore(command cmd)
     sprintf(exe, "/proc/%d/exe", pid);
     readlink(exe, executable, 255);
     int pargrp = getpgrp();
-    // write exclusively for all parents
     if (prefix(home, executable))
     {
         mystrcpy(executable, replaceHomeWithTilde(executable));

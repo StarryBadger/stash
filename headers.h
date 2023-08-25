@@ -48,4 +48,5 @@ extern PtrNode bglist;
 #define BLUE "\x1b[34m"
 #define WHITE "\x1b[37m"
 #define RESET "\x1b[0m"
+#define RED "\x1b[31m"
 #endif

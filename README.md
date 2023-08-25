@@ -11,4 +11,5 @@
 - pastevents are displayed in a specific format of `<command> ; <command> & command>` or if the last command is a background process, `<command> ; <command> & command> &`.
 - For seek, when tthe arget is a file, all files with the filename of the form `file`, `file.extension` are displayed
 - Commands followed by erronous commands separated by `;` or `&` are executed
-When a prompt takes >2 seconds to execute, 
+- When a prompt takes >2 seconds to execute, 
+

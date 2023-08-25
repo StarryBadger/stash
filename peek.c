@@ -26,7 +26,6 @@ void peekL(char *path, const char *filename)
     strcat(temp, filename);
 
     struct stat statInfo;
-    // printf("%s\n", temp);
     if (lstat(temp, &statInfo) == -1)
     {
         perror("lstat");
@@ -156,7 +155,8 @@ void peek(command cmd)
     }
     else
     {
-        // error
+        fprintf(stderr, "\x1b[31mpeek: Too many arguments\n\x1b[0m");
+        return;
     }
     if (prefix("~", path))
     {

@@ -38,9 +38,8 @@ void readPastEventsFromFile(commandList *cmdarr, int *commandCount)
 	FILE *file = fopen(path, "rb");
 	if (file == NULL)
 	{
-		// error handling
-		// perror("Failed to open file for reading");
-		// return;
+		fprintf(stderr,"\x1b[31mHistory unavailable\n\x1b[0m");
+		return;
 	}
 	fread(commandCount, sizeof(int), 1, file);
 	for (int i = 0; i < *commandCount; i++)
@@ -143,11 +142,12 @@ void pastevents(command cmd)
 		int n = myatoi(cmd.argv[2]) - 1;
 		if (n == -1 || n >= historyCount)
 		{
-			// error handling
+			fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m",cmd.argv[2]);
+			return;
 		}
 		else
 		{
-			pasteveexec = history[n]; // error handle for not a number and invalid numbers
+			pasteveexec = history[n];
 			executeCommand(pasteveexec);
 		}
 	}
