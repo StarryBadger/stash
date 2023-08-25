@@ -80,6 +80,11 @@ void seek(command cmd)
     bool targetset = false;
     char target[PATH_MAX], path[PATH_MAX];
     int i = 1;
+    if (cmd.argc == 1)
+    {
+        fprintf(stderr, "\x1b[31mseek: No target file/directory\n\x1b[0m");
+        return;
+    }
     for (int i = 1; i < cmd.argc; i++)
     {
         if (setSeekFlags(cmd.argv[i], &F, &E, &D))
