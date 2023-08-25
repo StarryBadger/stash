@@ -69,6 +69,10 @@ void executeCommand(commandList toExecute)
         {
             peek(toExecute.arr[i]);
         }
+        else if (equal(toExecute.arr[i].argv[0], "seek"))
+        {
+            seek(toExecute.arr[i]);
+        }
         else if (equal(toExecute.arr[i].argv[0], "pastevents"))
         {
             pastevents(toExecute.arr[i]);

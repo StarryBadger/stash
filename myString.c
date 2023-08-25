@@ -84,3 +84,23 @@ int myatoi(char *str)
     }
     return n;
 }
+bool equalNameWithExtension(char *file, char *search)
+{
+    int i;
+    for (i = length(file) - 1; i >= 0; i--)
+        if (file[i] == '.')
+            break;
+    if (i == -1)
+        return equal(file, search);
+    else
+    {
+        int j = 0;
+        while (j < i)
+        {
+            if (file[j] != search[j])
+                return false;
+            j++;
+        }
+        return true;
+    }
+}

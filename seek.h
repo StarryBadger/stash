@@ -1,6 +1,6 @@
 #ifndef __SEEK_H
 #define __SEEK_H
 void seek(command);
-void peekL(char *path, const char *filename);
-void peekJist(char *path, const char *filename);
+void lookFor(bool *D, bool *F, char *target, char *path);
+bool setSeekFlags(char *input, bool *F, bool *E, bool *D);
 #endif

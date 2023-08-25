@@ -23,10 +23,10 @@
 #include "myString.h"
 #include "warp.h"
 #include "peek.h"
-#include "seek.h"
 #include "syscomm.h"
 #include "pastevents.h"
 #include "proclore.h"
+#include "seek.h"
 
 extern char *home;
 extern commandList history[15];
@@ -34,9 +34,12 @@ extern int historyCount;
 extern commandList pasteveexec;
 extern bool OLDPWDWARP;
 extern off_t total_block_size;
+extern int foundcount;
+extern char executeMe[PATH_MAX];
+extern int pathlength;
 
 #define MAX_COMMANDS 128
-#define DEBUG printf("1");
+#define DEBUG printf("1\n");
 #define GREEN "\x1b[32m"
 #define BLUE "\x1b[34m"
 #define WHITE "\x1b[37m"

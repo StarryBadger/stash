@@ -8,4 +8,5 @@ char *mystrcpy(char *, char *);
 char *removeSubstring(char *, char *);
 bool equal(char *, char *);
 int myatoi(char *str);
+bool equalNameWithExtension(char* file, char* search);
 #endif
