@@ -2,33 +2,34 @@
 # Description
 ## Final branch
 ### To run the shell, run the command `make` on the terminal. This creates an executable `a.out` which can be run by `./a.out`
-.
-├── a.out
-├── background.c
-├── background.h
-├── commands.c
-├── commands.h
-├── headers.h
-├── history
-├── main.c
-├── makefile
-├── myString.c
-├── myString.h
-├── pastevents.c
-├── pastevents.h
-├── peek.c
-├── peek.h
-├── proclore.c
-├── proclore.h
-├── prompt.c
-├── prompt.h
-├── README.md
-├── seek.c
-├── seek.h
-├── syscomm.c
-├── syscomm.h
-├── warp.c
-└── warp.h
+
+.  
+├── a.out  
+├── background.c  
+├── background.h  
+├── commands.c  
+├── commands.h  
+├── headers.h  
+├── history  
+├── main.c  
+├── makefile  
+├── myString.c  
+├── myString.h  
+├── pastevents.c  
+├── pastevents.h  
+├── peek.c  
+├── peek.h  
+├── proclore.c  
+├── proclore.h  
+├── prompt.c  
+├── prompt.h  
+├── README.md  
+├── seek.c  
+├── seek.h  
+├── syscomm.c  
+├── syscomm.h  
+├── warp.c  
+└── warp.h  
 
 - background.* handles background processes including functions for the list containing them
 - commands.* execute the commands entered in prompt. Also responsble for parsing
