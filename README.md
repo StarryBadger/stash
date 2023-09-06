@@ -1,7 +1,8 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/76mHqLr5)
 # Description
+## Final branch
 ### To run the shell, run the command `make` on the terminal. This creates an executable `a.out` which can be run by `./a.out`
-`.
+.
 ├── a.out
 ├── background.c
 ├── background.h
@@ -28,7 +29,7 @@
 ├── syscomm.h
 ├── warp.c
 └── warp.h
-`
+
 - background.* handles background processes including functions for the list containing them
 - commands.* execute the commands entered in prompt. Also responsble for parsing
 - header.h contains common header files
