@@ -28,6 +28,7 @@
 #include "proclore.h"
 #include "seek.h"
 #include "background.h"
+#include "redirection.h"
 
 extern char *home;
 extern commandList history[15];

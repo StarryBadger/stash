@@ -5,6 +5,7 @@ typedef struct command
     int argc;
     char argv[128][128];
     bool foreground;
+    bool redirection; 
 
 } command;
 typedef struct commandList
@@ -13,7 +14,7 @@ typedef struct commandList
     int count;
 
 } commandList;
-command commandify(char *str, bool stat);
+command commandify(char *str, bool stat, bool redirect);
 void execute(char *);
 
 void executeCommand(commandList);
