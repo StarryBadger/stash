@@ -82,7 +82,6 @@ void saveToHistory(commandList new)
 	{
 		is_equal = false;
 	}
-
 	if (historyCount != 0 && is_equal)
 	{
 		return;
@@ -124,6 +123,7 @@ void pastevents(command cmd)
 		}
 	}
 	if (cmd.argc == 2)
+	{
 		if ((equal(cmd.argv[1], "purge")))
 		{
 			{
@@ -137,24 +137,10 @@ void pastevents(command cmd)
 			fprintf(stderr, "\x1b[31mpastevents: Invalid arguments\n\x1b[0m");
 			return;
 		}
+	}
 	if (cmd.argc == 3)
-		if (equal(cmd.argv[1], "execute"))
-		{
-			int n = myatoi(cmd.argv[2]) - 1;
-			if (n == -1 || n >= historyCount)
-			{
-				fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m", cmd.argv[2]);
-				return;
-			}
-			else
-			{
-				pasteveexec = history[n];
-				executeCommand(pasteveexec);
-			}
-		}
-		else
-		{
-			fprintf(stderr, "\x1b[31mpastevents: Invalid arguments\n\x1b[0m");
-			return;
-		}
+	{
+		fprintf(stderr, "\x1b[31mpastevents: Invalid arguments\n\x1b[0m");
+		return;
+	}
 }

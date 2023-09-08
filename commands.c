@@ -43,7 +43,7 @@ void execute(char *input)
     for (int i = 0; i < tokenCount; i++)
     {
         command cmd = commandify(toExecuteStr[i], foreground[i], toRedirect(toExecuteStr[i]));
-        if (cmd.argc)
+        if (cmd.argc) // ensures empty commands are not added
         {
             toExecute.arr[toExecute.count++] = cmd;
         }
@@ -55,74 +55,75 @@ void executeCommand(commandList toExecute)
     commandList modified;
     modified.count = 0;
     bool toSave = true;
-    bool toReplace = false;
-    for (int i = 0; i < toExecute.count; i++)
+    for (int i = 0; i < toExecute.count; ++i)
     {
-        if (!toExecute.arr[i].redirection)
+        if (equal(toExecute.arr[i].argv[0], "pastevents"))
         {
-            if (toSave && (toExecute.arr[i].argc < 2 || !equal(toExecute.arr[i].argv[1], "execute")))
+            if (toExecute.arr[i].argc >= 2 && equal(toExecute.arr[i].argv[1], "execute"))
             {
-                modified.arr[modified.count] = toExecute.arr[i];
-                modified.count += 1;
-            }
-            if (equal(toExecute.arr[i].argv[0], "proclore"))
-            {
-                proclore(toExecute.arr[i]);
-            }
-            else if (equal(toExecute.arr[i].argv[0], "warp"))
-            {
-                warp(toExecute.arr[i]);
-            }
-            else if (equal(toExecute.arr[i].argv[0], "peek"))
-            {
-                peek(toExecute.arr[i]);
-            }
-            else if (equal(toExecute.arr[i].argv[0], "seek"))
-            {
-                seek(toExecute.arr[i]);
-            }
-            else if (equal(toExecute.arr[i].argv[0], "pastevents"))
-            {
-                pastevents(toExecute.arr[i]);
-                if (toExecute.arr[i].argc == 1 || !equal(toExecute.arr[i].argv[1], "execute"))
+                if (toExecute.arr[i].argc == 2)
                 {
-                    toSave = false;
+                    // error message: no number
+                }
+                else if (toExecute.arr[i].argc > 3)
+                {
+                    // error message: too many arguments
                 }
                 else
                 {
-                    toReplace = true;
-                    if (toSave)
+                    int n = myatoi(toExecute.arr[i].argv[2]) - 1;
+                    if (n == -1 || n >= historyCount)
                     {
-                        for (int j = 0; j < pasteveexec.count; j++)
-                        {
-                            modified.arr[modified.count + j] = pasteveexec.arr[j];
-                            ++modified.count;
-                        }
+                        fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m", toExecute.arr[i].argv[2]);
+                        return;
+                    }
+                    commandList fromHistory = history[n];
+                    for (int j = 0; j < fromHistory.count; j++)
+                    {
+                        modified.arr[modified.count++] = fromHistory.arr[j];
                     }
                 }
             }
             else
             {
-                sysexec(toExecute.arr[i]);
+                modified.arr[modified.count++] = toExecute.arr[i];
+                toSave = false;
             }
         }
         else
         {
-            command modifiedCommand=redirection(toExecute.arr[i]);
+            modified.arr[modified.count++] = toExecute.arr[i];
+        }
+    }
+    for (int i = 0; i < modified.count; i++)
+    {
+        if (equal(modified.arr[i].argv[0], "proclore"))
+        {
+            proclore(modified.arr[i]);
+        }
+        else if (equal(modified.arr[i].argv[0], "warp"))
+        {
+            warp(modified.arr[i]);
+        }
+        else if (equal(modified.arr[i].argv[0], "peek"))
+        {
+            peek(modified.arr[i]);
+        }
+        else if (equal(modified.arr[i].argv[0], "seek"))
+        {
+            seek(modified.arr[i]);
+        }
+        else if (equal(modified.arr[i].argv[0], "pastevents"))
+        {
+            pastevents(modified.arr[i]);
+        }
+        else
+        {
+            sysexec(modified.arr[i]);
         }
     }
     if (toSave)
     {
-        if (!toReplace)
-        {
-            saveToHistory(toExecute);
-        }
-        else
-        {
-            saveToHistory(modified);
-            {
-                toSave = false;
-            }
-        }
+        saveToHistory(modified);
     }
 }
