@@ -1,5 +1,5 @@
 #include "headers.h"
-bool toRedirect(char *str)
+bool toRedirectOrPipe(char *str)
 {
     for (int i = 0; i < length(str); i++)
     {
@@ -8,9 +8,38 @@ bool toRedirect(char *str)
     }
     return false;
 }
+char toRedirect(char *str, char *strData1, char *strData2)
+{
+    for (int i = 0; i < length(str); i++)
+    {
+        strData1[i] = str[i];
+        if (str[i] == '<')
+        {
+            strData1[i] = '\0';
+            mystrcpy(strData2, str + i + 1);
+            return 'R';
+        }
+        else if (str[i] == '>')
+        {
+            strData1[i] = '\0';
+            if (i != (length(str) - 1) && str[i + 1] == '>')
+            {
+                mystrcpy(strData2, str + i + 2);
+                return 'A';
+            }
+            else
+            {
+                mystrcpy(strData2, str + i + 1);
+                return 'W';
+            }
+        }
+    }
+    return 'X';
+}
 command redirection(command cmd)
 {
-    int pipers[128];
+    char pipers[32][128];
+    char temp1[128], temp2[128];
     char cmdStr[PATH_MAX];
     cmdStr[0] = '\0';
     for (int i = 0; i < cmd.argc; i++)
@@ -26,8 +55,20 @@ command redirection(command cmd)
         pipeCount += 1;
         token = strtok(NULL, "|");
     }
-    for (int i=0;i<pipeCount;++i)
+    command pipes[pipeCount];
+    char redirectInfo[pipeCount];
+    char redirectHere[pipeCount][64];
+    for (int i = 0; i < pipeCount; ++i)
     {
-        
+        redirectInfo[i] = toRedirect(pipers[i], temp1, temp2);
+        if (redirectInfo[i] == 'X')
+        {
+            pipes[i] = commandify(pipers[i], true, true);
+        }
+        else
+        {
+            pipes[i] = commandify(temp1, true, true);
+            mystrcpy(redirectHere[i], temp2);
+        }
     }
 }

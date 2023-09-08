@@ -42,7 +42,7 @@ void execute(char *input)
     }
     for (int i = 0; i < tokenCount; i++)
     {
-        command cmd = commandify(toExecuteStr[i], foreground[i], toRedirect(toExecuteStr[i]));
+        command cmd = commandify(toExecuteStr[i], foreground[i], toRedirectOrPipe(toExecuteStr[i]));
         if (cmd.argc) // ensures empty commands are not added
         {
             toExecute.arr[toExecute.count++] = cmd;
@@ -59,7 +59,7 @@ void executeCommand(commandList toExecute)
     {
         if (equal(toExecute.arr[i].argv[0], "pastevents"))
         {
-            if (toExecute.arr[i].argc >= 2 && equal(toExecute.arr[i].argv[1], "execute"))
+            if (toExecute.arr[i].argc >= 2 && equal(toExecute.arr[i].argv[1], "execute") && !toExecute.arr[i].redirection)
             {
                 if (toExecute.arr[i].argc == 2)
                 {
@@ -97,7 +97,11 @@ void executeCommand(commandList toExecute)
     }
     for (int i = 0; i < modified.count; i++)
     {
-        if (equal(modified.arr[i].argv[0], "proclore"))
+        if (modified.arr[i].redirection)
+        {
+            modified.arr[i] = redirection(modified.arr[i]);
+        }
+        else if (equal(modified.arr[i].argv[0], "proclore"))
         {
             proclore(modified.arr[i]);
         }

@@ -42,7 +42,7 @@ void execute(char *input)
     }
     for (int i = 0; i < tokenCount; i++)
     {
-        command cmd = commandify(toExecuteStr[i], foreground[i], toRedirect(toExecuteStr[i]));
+        command cmd = commandify(toExecuteStr[i], foreground[i], toRedirectOrPipe(toExecuteStr[i]));
         if (cmd.argc)
         {
             toExecute.arr[toExecute.count++] = cmd;

@@ -10,7 +10,7 @@ typedef struct command
 } command;
 typedef struct commandList
 {
-    command arr[50];
+    command arr[32];
     int count;
 
 } commandList;
