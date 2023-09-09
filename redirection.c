@@ -63,12 +63,26 @@ command redirection(command cmd)
         redirectInfo[i] = toRedirect(pipers[i], temp1, temp2);
         if (redirectInfo[i] == 'X')
         {
-            pipes[i] = commandify(pipers[i], true, true);
+            pipes[i] = commandify(pipers[i], true, false);
         }
         else
         {
-            pipes[i] = commandify(temp1, true, true);
+            pipes[i] = commandify(temp1, true, false);
             mystrcpy(redirectHere[i], temp2);
         }
     }
+    int in = 0, fileDesc[2];
+    pid_t procId;
+    for (int i = 0; i < pipeCount - 1; i++)
+    {
+        pipe(fileDesc);
+        handlePipedExecution(in, fileDesc[1], pipes + i);
+        close(fileDesc[1]);
+        in = fileDesc[0];
+    }
+    if (in != 0)
+    {
+        dup2(in, 0);
+    }
+    handlePipedExecution();
 }
