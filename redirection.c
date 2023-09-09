@@ -36,6 +36,21 @@ char toRedirect(char *str, char *strData1, char *strData2)
     }
     return 'X';
 }
+void handlePipedExecution(int in, int out, command cmd)
+{
+    // printf("%s!!!",cmd.argv[0]);
+    if (in != 0)
+    {
+        dup2(in, 0);
+        close(in);
+    }
+    if (out != 1)
+    {
+        dup2(out, 1);
+        close(out);
+    }
+    executeSingleCommand(cmd);
+}
 command redirection(command cmd)
 {
     char pipers[32][128];
@@ -68,15 +83,23 @@ command redirection(command cmd)
         else
         {
             pipes[i] = commandify(temp1, true, false);
-            mystrcpy(redirectHere[i], temp2);
+            mystrcpy(redirectHere[i], trim(temp2));
         }
+        // printCommand(pipes[i], 0);
+        // printf("%c\n", redirectInfo[i]);
+        // if (redirectInfo[i] != 'X')
+        // {
+        //     printf("%s\n", redirectHere[i]);
+        // }
     }
     int in = 0, fileDesc[2];
     pid_t procId;
+    int tempInput = dup(0);
+    int tempOutput = dup(1);
     for (int i = 0; i < pipeCount - 1; i++)
     {
         pipe(fileDesc);
-        handlePipedExecution(in, fileDesc[1], pipes + i);
+        handlePipedExecution(in, fileDesc[1], pipes[i]);
         close(fileDesc[1]);
         in = fileDesc[0];
     }
@@ -84,5 +107,7 @@ command redirection(command cmd)
     {
         dup2(in, 0);
     }
-    handlePipedExecution();
+    dup2(tempOutput, 1);
+    executeSingleCommand(pipes[pipeCount - 1]);
+    dup2(tempInput, 0);
 }

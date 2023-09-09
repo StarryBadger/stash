@@ -18,4 +18,5 @@ command commandify(char *str, bool stat, bool redirect);
 void execute(char *);
 
 void executeCommand(commandList);
+void executeSingleCommand(command cmd);
 #endif

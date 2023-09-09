@@ -131,3 +131,31 @@ void executeCommand(commandList toExecute)
         saveToHistory(modified);
     }
 }
+void executeSingleCommand(command cmd)
+{
+    // printf("%s!!!",cmd.argv[0]);
+    if (equal(cmd.argv[0], "proclore"))
+    {
+        proclore(cmd);
+    }
+    else if (equal(cmd.argv[0], "warp"))
+    {
+        warp(cmd);
+    }
+    else if (equal(cmd.argv[0], "peek"))
+    {
+        peek(cmd);
+    }
+    else if (equal(cmd.argv[0], "seek"))
+    {
+        seek(cmd);
+    }
+    else if (equal(cmd.argv[0], "pastevents"))
+    {
+        pastevents(cmd);
+    }
+    else
+    {
+        sysexec(cmd);
+    }
+}

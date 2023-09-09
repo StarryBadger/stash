@@ -107,3 +107,21 @@ bool equalNameWithExtension(char *file, char *search)
     }
     return true;
 }
+bool myIsspace(char c) {
+    return (c == ' ' || c == '\t' || c == '\n');
+}
+char* trim(char *str) {
+    int start = 0, end = strlen(str) - 1;
+    while (myIsspace(str[start])) {
+        start++;
+    }
+    while (end > start && myIsspace(str[end])) {
+        end--;
+    }
+    int i, j = 0;
+    for (i = start; i <= end; i++) {
+        str[j++] = str[i];
+    }
+    str[j] = '\0';
+    return str;
+}
