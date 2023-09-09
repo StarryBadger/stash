@@ -103,18 +103,37 @@ char toRedirect(char *str, char *strCmd, char *strInput, char *strOutput)
 
     return 'X';
 }
-void handlePipedExecution(int in, int out, command cmd)
+void handlePipedExecution(int in, int out, command cmd, char *input, char *output, char outputFlag)
 {
     if (in != 0)
     {
         dup2(in, 0);
-
         close(in);
+        if (length(input))
+        {
+            int infile = open(input, O_RDONLY);
+            dup2(infile, 0);
+            close(infile);
+        }
     }
     if (out != 1)
     {
         dup2(out, 1);
         close(out);
+        if (length(output))
+        {
+            int outfile;
+            if (outputFlag == 'W')
+            {
+                outfile = open(output, O_WRONLY | O_CREAT, 0644);
+            }
+            else
+            {
+                outfile = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            }
+            dup2(outfile, 1);
+            close(outfile);
+        }
     }
     executeSingleCommand(cmd);
 }
@@ -132,7 +151,7 @@ void convertPipesToString(int pipeCount, command pipes[pipeCount], char redirect
         {
             strcat(cmdStr, "< ");
             strcat(cmdStr, redirectFrom[i]);
-            strcat(cmdStr," ");
+            strcat(cmdStr, " ");
         }
         if (length(redirectTo[i]))
         {
@@ -147,8 +166,8 @@ void convertPipesToString(int pipeCount, command pipes[pipeCount], char redirect
                 strcat(cmdStr, redirectTo[i]);
             }
         }
-        if (i!=pipeCount-1)
-        strcat(cmdStr,"| ");
+        if (i != pipeCount - 1)
+            strcat(cmdStr, "| ");
     }
 }
 command redirection(command cmd)
@@ -192,7 +211,7 @@ command redirection(command cmd)
     }
     convertPipesToString(pipeCount, pipes, redirectInfo, redirectFrom, redirectTo, cmdStr);
     pipeCount = 0;
-    mystrcpy(cmdStrCopy,cmdStr);
+    mystrcpy(cmdStrCopy, cmdStr);
     token = strtok(cmdStr, "|");
     while (token != NULL)
     {
@@ -208,7 +227,7 @@ command redirection(command cmd)
             foregroundFlag = cmd.foreground;
         }
         redirectInfo[i] = toRedirect(pipers[i], comm, input, output);
-        pipes[i] = commandify(pipers[i], foregroundFlag, false);
+        pipes[i] = commandify(comm, foregroundFlag, false);
         removeOddArrows(input);
         removeOddArrows(output);
         mystrcpy(redirectFrom[i], trim(input));
@@ -216,17 +235,17 @@ command redirection(command cmd)
         // printCommand(pipes[i], 0);
         // printf("%c\n", redirectInfo[i]);
         // printf("Redirected from: %s\n", redirectFrom[i]);
-        // printf("Redirected to: %s\n", redirectTo[i]);        
+        // printf("Redirected to: %s\n", redirectTo[i]);
     }
-
     int in = 0, fileDesc[2];
     pid_t procId;
     int tempInput = dup(0);
     int tempOutput = dup(1);
-    for (int i = 0; i < pipeCount - 1; i++)
+    int i = 0;
+    for (; i < pipeCount - 1; i++)
     {
         pipe(fileDesc);
-        handlePipedExecution(in, fileDesc[1], pipes[i]);
+        handlePipedExecution(in, fileDesc[1], pipes[i], redirectFrom[i], redirectTo[i],redirectInfo[i]);
         close(fileDesc[1]);
         in = fileDesc[0];
     }
@@ -234,9 +253,18 @@ command redirection(command cmd)
     {
         dup2(in, 0);
     }
-    dup2(tempOutput, 1);
-    executeSingleCommand(pipes[pipeCount - 1]);
-    dup2(tempInput, 0);
-    command cmdlm=commandify(cmdStrCopy,cmd.foreground,true);
+    if (length(redirectTo[i]))
+    {
+        handlePipedExecution(in, fileDesc[1], pipes[i], redirectFrom[i], redirectTo[i], redirectInfo[i]);
+        dup2(tempInput, 0);
+        dup2(tempOutput, 1);
+    }
+    else
+    {
+        dup2(tempOutput, 1);
+        handlePipedExecution(in, fileDesc[1], pipes[i], redirectFrom[i], redirectTo[i], redirectInfo[i]);
+        dup2(tempInput, 0);
+    }
+    command cmdlm = commandify(cmdStrCopy, cmd.foreground, true);
     return cmdlm;
 }
