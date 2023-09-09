@@ -18,7 +18,8 @@ void sysexec(command cmd)
         }
         else if (child == 0)
         {
-            execvp(argv[0], argv);
+            if (execvp(argv[0], argv) == -1)
+                fprintf(stderr, "\x1b[31mUnable to execute %s\n\x1b[0m", argv[0]);
         }
         else
         {
@@ -36,7 +37,8 @@ void sysexec(command cmd)
         }
         else if (child == 0)
         {
-            execvp(argv[0], argv);
+            if (execvp(argv[0], argv) == -1)
+                fprintf(stderr, "\x1b[31mUnable to execute %s\n\x1b[0m", argv[0]);
         }
         else
         {
