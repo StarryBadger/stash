@@ -28,7 +28,7 @@ void insertNode(Node *head, char *name, int value)
     }
     current->next = newNode;
 }
-void removeNode(struct Node *head, int valueToRemove)
+void removeNode(struct Node *head, int valueToRemove, bool successfulExit)
 {
     struct Node *current = head;
     struct Node *previous = NULL;
@@ -36,7 +36,14 @@ void removeNode(struct Node *head, int valueToRemove)
     {
         if (current->value == valueToRemove)
         {
-            printf("%s exited normally (%d)\n", current->name, current->value);
+            if (successfulExit)
+            {
+                printf("%s exited normally (%d)\n", current->name, current->value);
+            }
+            else
+            {
+                printf("%s exited abnormally (%d)\n", current->name, current->value);
+            }
             if (previous == NULL)
             {
                 head = current->next;
@@ -60,8 +67,11 @@ void findKilled()
 {
     pid_t killed;
     int status;
-    while ((killed = waitpid(-1, &status,WNOHANG)) > 0)
+    while ((killed = waitpid(-1, &status, WNOHANG | WUNTRACED)) > 0)
     {
-        removeNode(bglist, killed);
+        if (WIFEXITED(status))
+            removeNode(bglist, killed, true);
+        else
+            removeNode(bglist, killed, false);
     }
 }

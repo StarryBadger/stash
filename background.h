@@ -11,5 +11,5 @@ void insertNode(struct Node *head, char *name, int value);
 struct Node *initializeList();
 struct Node *createNode(char *name, int value);
 void findKilled();
-void removeNode(struct Node *head, int valueToRemove);
+void removeNode(struct Node *head, int valueToRemove, bool successfulExit);
 #endif

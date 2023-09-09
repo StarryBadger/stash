@@ -38,7 +38,6 @@ char toRedirect(char *str, char *strData1, char *strData2)
 }
 void handlePipedExecution(int in, int out, command cmd)
 {
-    // printf("%s!!!",cmd.argv[0]);
     if (in != 0)
     {
         dup2(in, 0);
@@ -75,14 +74,19 @@ command redirection(command cmd)
     char redirectHere[pipeCount][64];
     for (int i = 0; i < pipeCount; ++i)
     {
+        bool foregroundFlag = true;
+        if (i == pipeCount - 1)
+        {
+            foregroundFlag = cmd.foreground;
+        }
         redirectInfo[i] = toRedirect(pipers[i], temp1, temp2);
         if (redirectInfo[i] == 'X')
         {
-            pipes[i] = commandify(pipers[i], true, false);
+            pipes[i] = commandify(pipers[i], foregroundFlag, false);
         }
         else
         {
-            pipes[i] = commandify(temp1, true, false);
+            pipes[i] = commandify(temp1, foregroundFlag, false);
             mystrcpy(redirectHere[i], trim(temp2));
         }
         // printCommand(pipes[i], 0);
