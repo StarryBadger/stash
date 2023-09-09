@@ -6,4 +6,5 @@ void saveToHistory(commandList);
 void pastevents(command cmd);
 void printCommandList(commandList cmdL);
 void printCommand(command cmd, int last);
+command pasteventsExecuteCheck(command cmd);
 #endif

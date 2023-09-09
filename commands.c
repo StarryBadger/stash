@@ -59,28 +59,35 @@ void executeCommand(commandList toExecute)
     {
         if (equal(toExecute.arr[i].argv[0], "pastevents"))
         {
-            if (toExecute.arr[i].argc >= 2 && equal(toExecute.arr[i].argv[1], "execute") && !toExecute.arr[i].redirection)
+            if (toExecute.arr[i].argc >= 2 && equal(toExecute.arr[i].argv[1], "execute"))
             {
-                if (toExecute.arr[i].argc == 2)
+                if (toExecute.arr[i].redirection)
                 {
-                    // error message: no number
-                }
-                else if (toExecute.arr[i].argc > 3)
-                {
-                    // error message: too many arguments
+                    modified.arr[modified.count++] = toExecute.arr[i];
                 }
                 else
                 {
-                    int n = myatoi(toExecute.arr[i].argv[2]) - 1;
-                    if (n == -1 || n >= historyCount)
+                    if (toExecute.arr[i].argc == 2)
                     {
-                        fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m", toExecute.arr[i].argv[2]);
-                        return;
+                        // error message: no number
                     }
-                    commandList fromHistory = history[n];
-                    for (int j = 0; j < fromHistory.count; j++)
+                    else if (toExecute.arr[i].argc > 3)
                     {
-                        modified.arr[modified.count++] = fromHistory.arr[j];
+                        // error message: too many arguments
+                    }
+                    else
+                    {
+                        int n = myatoi(toExecute.arr[i].argv[2]) - 1;
+                        if (n == -1 || n >= historyCount)
+                        {
+                            fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m", toExecute.arr[i].argv[2]);
+                            return;
+                        }
+                        commandList fromHistory = history[n];
+                        for (int j = 0; j < fromHistory.count; j++)
+                        {
+                            modified.arr[modified.count++] = fromHistory.arr[j];
+                        }
                     }
                 }
             }
@@ -126,6 +133,8 @@ void executeCommand(commandList toExecute)
             sysexec(modified.arr[i]);
         }
     }
+    // printCommand(modified.arr[0], 0);
+    // printf("SAVE? %d\n", toSave);
     if (toSave)
     {
         saveToHistory(modified);

@@ -11,4 +11,5 @@ int myatoi(char *str);
 bool equalNameWithExtension(char* file, char* search);
 bool myIsspace(char c);
 char* trim(char *str);
+void removeOddArrows(char *str);
 #endif

@@ -8,32 +8,99 @@ bool toRedirectOrPipe(char *str)
     }
     return false;
 }
-char toRedirect(char *str, char *strData1, char *strData2)
+char toRedirect(char *str, char *strCmd, char *strInput, char *strOutput)
 {
-    for (int i = 0; i < length(str); i++)
+    int i;
+    int len = strlen(str);
+    int cmdEnd = -1;
+    int inputStart = -1;
+    int outputStart = -1;
+    bool append = false;
+
+    for (i = 0; i < len; i++)
     {
-        strData1[i] = str[i];
-        if (str[i] == '<')
+        if (str[i] == '<' || str[i] == '>')
         {
-            strData1[i] = '\0';
-            mystrcpy(strData2, str + i + 1);
-            return 'R';
-        }
-        else if (str[i] == '>')
-        {
-            strData1[i] = '\0';
-            if (i != (length(str) - 1) && str[i + 1] == '>')
+            if (cmdEnd == -1)
             {
-                mystrcpy(strData2, str + i + 2);
-                return 'A';
+                strncpy(strCmd, str, i);
+                strCmd[i] = '\0';
+                cmdEnd = i;
             }
-            else
+
+            if (str[i] == '<')
             {
-                mystrcpy(strData2, str + i + 1);
-                return 'W';
+                inputStart = i + 1;
+            }
+            else if (str[i] == '>')
+            {
+                // Check for append (>>) or write (>)
+                if (i + 1 < len && str[i + 1] == '>')
+                {
+                    // Append mode
+                    outputStart = i + 2;
+                    append = true;
+                }
+                else
+                {
+                    // Write mode
+                    outputStart = i + 1;
+                }
             }
         }
     }
+
+    if (cmdEnd == -1)
+    {
+        // No redirection symbols found
+        strncpy(strCmd, str, len);
+        strCmd[len] = '\0';
+        return 'X';
+    }
+
+    // Extract the input and output file names
+    if (inputStart != -1)
+    {
+        strncpy(strInput, str + inputStart, len - inputStart);
+        strInput[len - inputStart] = '\0';
+    }
+
+    if (outputStart != -1)
+    {
+        strncpy(strOutput, str + outputStart, len - outputStart);
+        strOutput[len - outputStart] = '\0';
+    }
+
+    if (inputStart != -1 && outputStart != -1)
+    {
+        // Both input and output redirection
+        if (append)
+        {
+            return 'A';
+        }
+        else
+        {
+            return 'W';
+        }
+    }
+    else if (inputStart != -1)
+    {
+        // Input redirection
+        return 'R';
+    }
+    else if (outputStart != -1)
+    {
+        // Output redirection
+        if (append)
+        {
+            return 'A';
+        }
+        else
+        {
+            return 'W';
+        }
+    }
+
     return 'X';
 }
 void handlePipedExecution(int in, int out, command cmd)
@@ -41,6 +108,7 @@ void handlePipedExecution(int in, int out, command cmd)
     if (in != 0)
     {
         dup2(in, 0);
+
         close(in);
     }
     if (out != 1)
@@ -50,11 +118,45 @@ void handlePipedExecution(int in, int out, command cmd)
     }
     executeSingleCommand(cmd);
 }
+void convertPipesToString(int pipeCount, command pipes[pipeCount], char redirectInfo[pipeCount], char redirectFrom[pipeCount][64], char redirectTo[pipeCount][64], char cmdStr[PATH_MAX])
+{
+    cmdStr[0] = '\0';
+    for (int i = 0; i < pipeCount; ++i)
+    {
+        for (int j = 0; j < pipes[i].argc; j++)
+        {
+            strcat(cmdStr, pipes[i].argv[j]);
+            strcat(cmdStr, " ");
+        }
+        if (length(redirectFrom[i]))
+        {
+            strcat(cmdStr, "< ");
+            strcat(cmdStr, redirectFrom[i]);
+            strcat(cmdStr," ");
+        }
+        if (length(redirectTo[i]))
+        {
+            if (redirectInfo[i] == 'A')
+            {
+                strcat(cmdStr, ">> ");
+                strcat(cmdStr, redirectTo[i]);
+            }
+            else
+            {
+                strcat(cmdStr, "> ");
+                strcat(cmdStr, redirectTo[i]);
+            }
+        }
+        if (i!=pipeCount-1)
+        strcat(cmdStr,"| ");
+    }
+}
 command redirection(command cmd)
 {
-    char pipers[32][128];
-    char temp1[128], temp2[128];
+    char pipers[16][128];
+    char comm[128], input[128], output[128];
     char cmdStr[PATH_MAX];
+    char cmdStrCopy[PATH_MAX];
     cmdStr[0] = '\0';
     for (int i = 0; i < cmd.argc; i++)
     {
@@ -69,9 +171,10 @@ command redirection(command cmd)
         pipeCount += 1;
         token = strtok(NULL, "|");
     }
-    command pipes[pipeCount];
-    char redirectInfo[pipeCount];
-    char redirectHere[pipeCount][64];
+    command pipes[16];
+    char redirectInfo[16];
+    char redirectFrom[16][64];
+    char redirectTo[16][64];
     for (int i = 0; i < pipeCount; ++i)
     {
         bool foregroundFlag = true;
@@ -79,23 +182,43 @@ command redirection(command cmd)
         {
             foregroundFlag = cmd.foreground;
         }
-        redirectInfo[i] = toRedirect(pipers[i], temp1, temp2);
-        if (redirectInfo[i] == 'X')
+        redirectInfo[i] = toRedirect(pipers[i], comm, input, output);
+        pipes[i] = commandify(comm, foregroundFlag, false);
+        pipes[i] = pasteventsExecuteCheck(pipes[i]);
+        removeOddArrows(input);
+        removeOddArrows(output);
+        mystrcpy(redirectFrom[i], trim(input));
+        mystrcpy(redirectTo[i], trim(output));
+    }
+    convertPipesToString(pipeCount, pipes, redirectInfo, redirectFrom, redirectTo, cmdStr);
+    pipeCount = 0;
+    mystrcpy(cmdStrCopy,cmdStr);
+    token = strtok(cmdStr, "|");
+    while (token != NULL)
+    {
+        mystrcpy(pipers[pipeCount], token);
+        pipeCount += 1;
+        token = strtok(NULL, "|");
+    }
+    for (int i = 0; i < pipeCount; ++i)
+    {
+        bool foregroundFlag = true;
+        if (i == pipeCount - 1)
         {
-            pipes[i] = commandify(pipers[i], foregroundFlag, false);
+            foregroundFlag = cmd.foreground;
         }
-        else
-        {
-            pipes[i] = commandify(temp1, foregroundFlag, false);
-            mystrcpy(redirectHere[i], trim(temp2));
-        }
+        redirectInfo[i] = toRedirect(pipers[i], comm, input, output);
+        pipes[i] = commandify(pipers[i], foregroundFlag, false);
+        removeOddArrows(input);
+        removeOddArrows(output);
+        mystrcpy(redirectFrom[i], trim(input));
+        mystrcpy(redirectTo[i], trim(output));
         // printCommand(pipes[i], 0);
         // printf("%c\n", redirectInfo[i]);
-        // if (redirectInfo[i] != 'X')
-        // {
-        //     printf("%s\n", redirectHere[i]);
-        // }
+        // printf("Redirected from: %s\n", redirectFrom[i]);
+        // printf("Redirected to: %s\n", redirectTo[i]);        
     }
+
     int in = 0, fileDesc[2];
     pid_t procId;
     int tempInput = dup(0);
@@ -114,4 +237,6 @@ command redirection(command cmd)
     dup2(tempOutput, 1);
     executeSingleCommand(pipes[pipeCount - 1]);
     dup2(tempInput, 0);
+    command cmdlm=commandify(cmdStrCopy,cmd.foreground,true);
+    return cmdlm;
 }

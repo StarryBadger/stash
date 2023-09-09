@@ -144,3 +144,29 @@ void pastevents(command cmd)
 		return;
 	}
 }
+command pasteventsExecuteCheck(command cmd)
+{
+	if (cmd.argc >= 2 && equal(cmd.argv[1], "execute"))
+	{
+		if (cmd.argc == 2)
+		{
+			// error message: no number
+		}
+		else if (cmd.argc > 3)
+		{
+			// error message: too many arguments
+		}
+		else
+		{
+			int n = myatoi(cmd.argv[2]) - 1;
+			if (n == -1 || n >= historyCount)
+			{
+				fprintf(stderr, "\x1b[31mpastevents: %s is not a valid argument for pastevents execute\n\x1b[0m", cmd.argv[2]);
+				// return;
+			}
+			commandList fromHistory = history[n];
+			cmd = fromHistory.arr[0];
+		}
+	}
+	return cmd;
+}
