@@ -27,7 +27,7 @@ int main()
         time(&beforeCode);
         findKilled();
         execute(input);
-        removeDeadNodes(bglist);
+        removeDeadNodes();
         time_t afterCode;
         time(&afterCode);
         char *token = strtok(input, " \n\t\r\v\f");

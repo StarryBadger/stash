@@ -57,10 +57,10 @@ void stopNode(PtrNode head, int valueToRemove, bool successfulExit)
         }
     }
 }
-void removeDeadNodes(PtrNode head)
+void removeDeadNodes()
 {
-    PtrNode previous = head;
-    PtrNode current = head->next;
+    PtrNode previous = bglist;
+    PtrNode current = bglist->next;
     while (current != NULL)
     {
         if (current->running == false)

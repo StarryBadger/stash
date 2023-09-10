@@ -13,5 +13,5 @@ struct Node *initializeList();
 struct Node *createNode(char *name, int value);
 void findKilled();
 void stopNode(struct Node *head, int valueToRemove, bool successfulExit);
-void removeDeadNodes(struct Node *head);
+void removeDeadNodes();
 #endif
