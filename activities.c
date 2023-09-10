@@ -16,14 +16,14 @@ int countNodes(PtrNode head)
     }
     return count;
 }
-void printActivities(int count, PtrNode nodes)
+void printActivities(int count, PtrNode nodes[count])
 {
     for (int i = 0; i < count; i++)
     {
-        if (nodes->running)
-            printf("%d : %s - Running", nodes->value, nodes->name);
+        if (nodes[i]->running)
+            printf("%d : %s - Running\n", nodes[i]->value, nodes[i]->name);
         else
-            printf("%d : %s - Running", nodes->value, nodes->name);
+            printf("%d : %s - Stopped\n", nodes[i]->value, nodes[i]->name);
     }
 }
 void activities(command cmd)
@@ -42,4 +42,5 @@ void activities(command cmd)
         current = current->next;
     }
     qsort(nodes, count, sizeof(Node), compareNodes);
+    printActivities(count,nodes);
 }
