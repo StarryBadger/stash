@@ -29,6 +29,7 @@
 #include "seek.h"
 #include "background.h"
 #include "redirection.h"
+#include "activities.h"
 
 extern char *home;
 extern commandList history[15];

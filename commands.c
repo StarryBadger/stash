@@ -116,6 +116,10 @@ void executeCommand(commandList toExecute)
         {
             warp(modified.arr[i]);
         }
+        else if (equal(modified.arr[i].argv[0], "activities"))
+        {
+            activities(modified.arr[i]);
+        }
         else if (equal(modified.arr[i].argv[0], "peek"))
         {
             peek(modified.arr[i]);
@@ -148,6 +152,10 @@ void executeSingleCommand(command cmd)
         proclore(cmd);
     }
     else if (equal(cmd.argv[0], "warp"))
+    {
+        warp(cmd);
+    }
+    else if (equal(cmd.argv[0], "activities"))
     {
         warp(cmd);
     }
