@@ -10,6 +10,7 @@ Node *createNode(char *name, int value)
     mystrcpy(newNode->name, name);
     newNode->value = value;
     newNode->next = NULL;
+    newNode->running=true;
     return newNode;
 }
 Node *initializeList()
@@ -18,7 +19,7 @@ Node *initializeList()
     return dummy;
 }
 
-void insertNode(Node *head, char *name, int value)
+void insertNode(Node *head, char *name, int value, bool running)
 {
     Node *newNode = createNode(name, value);
     Node *current = head;
@@ -27,8 +28,9 @@ void insertNode(Node *head, char *name, int value)
         current = current->next;
     }
     current->next = newNode;
+    current->running = running;
 }
-void removeNode(struct Node *head, int valueToRemove, bool successfulExit)
+void stopNode(struct Node *head, int valueToRemove, bool successfulExit)
 {
     struct Node *current = head;
     struct Node *previous = NULL;
@@ -44,6 +46,18 @@ void removeNode(struct Node *head, int valueToRemove, bool successfulExit)
             {
                 printf("%s exited abnormally (%d)\n", current->name, current->value);
             }
+            current->running = false;
+        }
+    }
+}
+void removeDeadNodes(struct Node *head)
+{
+    struct Node *current = head;
+    struct Node *previous = NULL;
+    while (current != NULL)
+    {
+        if (!current->running)
+        {
             if (previous == NULL)
             {
                 head = current->next;
@@ -70,8 +84,8 @@ void findKilled()
     while ((killed = waitpid(-1, &status, WNOHANG | WUNTRACED)) > 0)
     {
         if (WIFEXITED(status))
-            removeNode(bglist, killed, true);
+            stopNode(bglist, killed, true);
         else
-            removeNode(bglist, killed, false);
+            stopNode(bglist, killed, false);
     }
 }
