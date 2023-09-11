@@ -33,7 +33,7 @@ void sysexec(command cmd)
         if (child > 0)
         {
             printf("%d\n", child);
-            insertNode(bglist, argv[0], child, true);
+            insertNode(bglist, argv[0], child);
         }
         else if (child == 0)
         {

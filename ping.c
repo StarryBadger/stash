@@ -25,5 +25,5 @@ void ping(command cmd)
     if (status!=0)
     fprintf(stderr, "\x1b[31mping: some error occured while sending the signal\n\x1b[0m");
     else
-    printf("Sent signal %d to process with pid %d",pid,signum);
+    printf("Sent signal %d to process with pid %d\n",pid,signum);
 }

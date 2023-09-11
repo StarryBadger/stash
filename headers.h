@@ -3,20 +3,22 @@
 
 #define _GNU_SOURCE
 
+#include <ctype.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <grp.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <limits.h>
 #include <linux/limits.h>
-#include <stdlib.h>
+#include <pwd.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <pwd.h>
-#include <grp.h>
+#include <termios.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "commands.h"
 #include "prompt.h"

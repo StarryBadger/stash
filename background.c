@@ -10,7 +10,6 @@ Node *createNode(char *name, int value)
     mystrcpy(newNode->name, name);
     newNode->value = value;
     newNode->next = NULL;
-    newNode->running = true;
     return newNode;
 }
 Node *initializeList()
@@ -19,7 +18,7 @@ Node *initializeList()
     return dummy;
 }
 
-void insertNode(Node *head, char *name, int value, bool running)
+void insertNode(Node *head, char *name, int value)
 {
     Node *newNode = createNode(name, value);
     Node *current = head;
@@ -28,54 +27,6 @@ void insertNode(Node *head, char *name, int value, bool running)
         current = current->next;
     }
     current->next = newNode;
-    current->running = running;
-}
-void stopNode(PtrNode head, int valueToRemove, bool successfulExit)
-{
-    PtrNode current = head;
-    PtrNode previous = NULL;
-    while (current != NULL)
-    {
-        if (current->value == valueToRemove)
-        {
-            if (successfulExit)
-            {
-                printf("%s exited normally (%d)\n", current->name, current->value);
-            }
-            else
-            {
-                printf("%s exited abnormally (%d)\n", current->name, current->value);
-            }
-            current->running = false;
-            DEBUG
-            current = current->next;
-        }
-        else
-        {
-            previous = current;
-            current = current->next;
-        }
-    }
-}
-void removeDeadNodes()
-{
-    PtrNode previous = bglist;
-    PtrNode current = bglist->next;
-    while (current != NULL)
-    {
-        if (current->running == false)
-        {
-            PtrNode temp = current;
-            previous->next = current->next;
-            current = current->next;
-            free(temp);
-        }
-        else
-        {
-            previous = current;
-            current = current->next;
-        }
-    }
 }
 void findKilled()
 {
@@ -94,8 +45,17 @@ void findKilled()
             {
                 printf("%s exited abnormally (%d)\n", current->name, current->value);
             }
-            current->running = false;
+            if (previous == NULL)
+            {
+                bglist = current->next;
+            }
+            else
+            {
+                previous->next = current->next;
+            }
+            struct Node *temp = current;
             current = current->next;
+            free(temp);
         }
         else
         {
@@ -103,13 +63,4 @@ void findKilled()
             current = current->next;
         }
     }
-    int count = countNodes(bglist);
-    PtrNode nodes[count];
-    PtrNode current1 = bglist->next;
-    for (int i = 0; i < count; i++)
-    {
-        nodes[i] = current1;
-        current1 = current1->next;
-    }
-    qsort(nodes, count, sizeof(Node), compareNodes);
 }

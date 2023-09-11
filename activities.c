@@ -1,9 +1,9 @@
 #include "headers.h"
 int compareNodes(const void *a, const void *b)
 {
-    const Node *nodeA = (const Node *)a;
-    const Node *nodeB = (const Node *)b;
-    return (nodeA->value - nodeB->value);
+    const NodeStatus *nodeA = (const NodeStatus *)a;
+    const NodeStatus *nodeB = (const NodeStatus *)b;
+    return (nodeA->nodeptr->value - nodeB->nodeptr->value);
 }
 int countNodes(PtrNode head)
 {
@@ -16,14 +16,14 @@ int countNodes(PtrNode head)
     }
     return count;
 }
-void printActivities(int count, PtrNode nodes[count])
+void printActivities(int count, NodeStatus nodes[count])
 {
     for (int i = 0; i < count; i++)
     {
-        if (nodes[i]->running)
-            printf("%d : %s - Running\n", nodes[i]->value, nodes[i]->name);
+        if (nodes[i].running)
+            printf("%d : %s - Running\n", nodes[i].nodeptr->value, nodes[i].nodeptr->name);
         else
-            printf("%d : %s - Stopped\n", nodes[i]->value, nodes[i]->name);
+            printf("%d : %s - Stopped\n", nodes[i].nodeptr->value, nodes[i].nodeptr->name);
     }
 }
 void activities(command cmd)
@@ -34,13 +34,15 @@ void activities(command cmd)
         return;
     }
     int count = countNodes(bglist);
-    PtrNode nodes[count];
+    NodeStatus nodes[count];
     PtrNode current = bglist->next;
+    int status;
     for (int i = 0; i < count; i++)
     {
-        nodes[i] = current;
+        nodes[i].nodeptr = current;
+        nodes[i].running = waitpid(current->value, &status, WNOHANG) == 0;
         current = current->next;
     }
-    qsort(nodes, count, sizeof(Node), compareNodes);
-    printActivities(count,nodes);
+    qsort(nodes, count, sizeof(NodeStatus), compareNodes);
+    printActivities(count, nodes);
 }

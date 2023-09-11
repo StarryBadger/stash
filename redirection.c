@@ -119,9 +119,7 @@ void handlePipedExecution(int in, int out, command cmd, char *output, char outpu
             int outfile;
             if (outputFlag == 'W')
             {
-                FILE *file = fopen(output, "w");
-                fclose(file);
-                outfile = open(output, O_WRONLY | O_CREAT, 0644);
+                outfile = open(output, O_WRONLY | O_TRUNC | O_CREAT, 0644);
             }
             else
             {
@@ -255,10 +253,8 @@ command redirection(command cmd)
         {
             if (redirectInfo[i] == 'W')
             {
-                FILE *file = fopen(redirectTo[i], "w");
-                fclose(file);
-                outfile = open(redirectTo[i], O_WRONLY | O_CREAT, 0644);
-        // fprintf(stderr, "YIKES 2\n");
+                outfile = open(redirectTo[i], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+                // fprintf(stderr, "YIKES 2\n");
             }
             else
             {
