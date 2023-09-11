@@ -26,6 +26,7 @@ int main()
     sa.sa_handler = handleCtrlC;
     sa.sa_flags = SA_RESTART;
     sigaction(SIGINT, &sa, NULL);
+    signal(SIGTSTP,SIG_IGN);
     while (1)
     {
         prompt();

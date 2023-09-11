@@ -124,6 +124,10 @@ void executeCommand(commandList toExecute)
         {
             bg(modified.arr[i]);
         }
+        else if (equal(modified.arr[i].argv[0], "fg"))
+        {
+            fg(modified.arr[i]);
+        }
         else if (equal(modified.arr[i].argv[0], "peek"))
         {
             peek(modified.arr[i]);
@@ -178,6 +182,10 @@ void executeSingleCommand(command cmd)
     else if (equal(cmd.argv[0], "bg"))
     {
         bg(cmd);
+    }
+    else if (equal(cmd.argv[0], "fg"))
+    {
+        fg(cmd);
     }
     else if (equal(cmd.argv[0], "seek"))
     {

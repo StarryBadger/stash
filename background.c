@@ -35,7 +35,7 @@ void findKilled()
     PtrNode previous = bglist;
     while (current != NULL)
     {
-        if (waitpid(current->value, &status, WNOHANG | WUNTRACED) != 0)
+        if (waitpid(current->value, &status, WNOHANG | WUNTRACED) !=0)
         {
             if (WIFEXITED(status))
             {
@@ -48,6 +48,34 @@ void findKilled()
             if (previous == NULL)
             {
                 bglist = current->next;
+            }
+            else
+            {
+                previous->next = current->next;
+            }
+            struct Node *temp = current;
+            current = current->next;
+            free(temp);
+        }
+        else
+        {
+            previous = current;
+            current = current->next;
+        }
+    }
+}
+void removeNode(PtrNode head, int valueToRemove)
+{
+    PtrNode current = head;
+    PtrNode previous = NULL;
+    while (current != NULL)
+    {
+        if (current->value == valueToRemove)
+        {
+            printf("%s exited normally (%d)\n", current->name, current->value);
+            if (previous == NULL)
+            {
+                head = current->next;
             }
             else
             {
