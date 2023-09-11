@@ -124,6 +124,10 @@ void executeCommand(commandList toExecute)
         {
             peek(modified.arr[i]);
         }
+        else if (equal(modified.arr[i].argv[0], "ping"))
+        {
+            ping(modified.arr[i]);
+        }
         else if (equal(modified.arr[i].argv[0], "seek"))
         {
             seek(modified.arr[i]);
@@ -157,11 +161,15 @@ void executeSingleCommand(command cmd)
     }
     else if (equal(cmd.argv[0], "activities"))
     {
-        warp(cmd);
+        activities(cmd);
     }
     else if (equal(cmd.argv[0], "peek"))
     {
         peek(cmd);
+    }
+    else if (equal(cmd.argv[0], "ping"))
+    {
+        ping(cmd);
     }
     else if (equal(cmd.argv[0], "seek"))
     {
