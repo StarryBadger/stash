@@ -14,7 +14,7 @@ command commandify(char *str, bool stat, bool redirect)
     cmd.redirection = redirect;
     return cmd;
 }
-void execute(char *input)
+void execute(char* input)
 {
     int tokenCount = 0;
     commandList toExecute;
@@ -24,21 +24,21 @@ void execute(char *input)
     bool redirection[MAX_COMMANDS];
     char inputCopy[4096];
     mystrcpy(inputCopy, input);
-    char *token = strtok(inputCopy, "&;\n");
+    char *token = strtok(inputCopy, "&;");
     while (token != NULL)
     {
         char *curr = malloc(sizeof(char) * length(token) + 1);
         mystrcpy(curr, token);
         toExecuteStr[tokenCount++] = curr;
-        token = strtok(NULL, "&;\n");
+        token = strtok(NULL, "&;");
     }
     for (int i = 0; i < tokenCount; i++)
     {
         input += length(toExecuteStr[i]);
-        if (input[i] == ';' || input[i] == '\n')
-            foreground[i] = 1;
-        else
+        if (input[i] == '&')
             foreground[i] = 0;
+        else
+            foreground[i] = 1;
     }
     for (int i = 0; i < tokenCount; i++)
     {
@@ -120,6 +120,10 @@ void executeCommand(commandList toExecute)
         {
             activities(modified.arr[i]);
         }
+        else if (equal(modified.arr[i].argv[0], "bg"))
+        {
+            bg(modified.arr[i]);
+        }
         else if (equal(modified.arr[i].argv[0], "peek"))
         {
             peek(modified.arr[i]);
@@ -170,6 +174,10 @@ void executeSingleCommand(command cmd)
     else if (equal(cmd.argv[0], "ping"))
     {
         ping(cmd);
+    }
+    else if (equal(cmd.argv[0], "bg"))
+    {
+        bg(cmd);
     }
     else if (equal(cmd.argv[0], "seek"))
     {

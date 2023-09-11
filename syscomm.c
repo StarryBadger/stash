@@ -14,12 +14,19 @@ void sysexec(command cmd)
         if (child > 0)
         {
             int status;
+            // toReprintPrompt = false;
             waitpid(child, &status, 0);
+            // toReprintPrompt = true;
         }
         else if (child == 0)
         {
+            signal(SIGINT, SIG_DFL);
+            signal(SIGTSTP, SIG_DFL);
             if (execvp(argv[0], argv) == -1)
+            {
                 fprintf(stderr, "\x1b[31mUnable to execute %s\n\x1b[0m", argv[0]);
+                exit(1);
+            }
         }
         else
         {
@@ -37,8 +44,13 @@ void sysexec(command cmd)
         }
         else if (child == 0)
         {
+            signal(SIGINT, SIG_DFL);
+            signal(SIGTSTP, SIG_DFL);
             if (execvp(argv[0], argv) == -1)
+            {
                 fprintf(stderr, "\x1b[31mUnable to execute %s\n\x1b[0m", argv[0]);
+                exit(1);
+            }
         }
         else
         {

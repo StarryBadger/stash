@@ -20,6 +20,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "signalhandler.h"
 #include "commands.h"
 #include "prompt.h"
 #include "myString.h"
@@ -33,6 +34,8 @@
 #include "redirection.h"
 #include "activities.h"
 #include "ping.h"
+#include "raw.h"
+#include "fgbg.h"
 
 extern char *home;
 extern commandList history[15];
@@ -44,8 +47,12 @@ extern int foundcount;
 extern char executeMe[PATH_MAX];
 extern int pathlength;
 extern char timetaker[PATH_MAX];
+
 extern int timetakertime;
 extern PtrNode bglist;
+extern bool toReprintPrompt;
+extern char inp[PATH_MAX];
+extern int pt;
 
 #define MAX_COMMANDS 128
 #define DEBUG printf("1\n");
