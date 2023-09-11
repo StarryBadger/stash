@@ -9,4 +9,5 @@ int compareNodes(const void *a, const void *b);
 int countNodes(PtrNode head);
 void printActivities(int count, NodeStatus *nodes);
 void activities(command cmd);
+char checkState(int pid);
 #endif
