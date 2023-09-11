@@ -35,7 +35,22 @@ void findKilled()
     PtrNode previous = bglist;
     while (current != NULL)
     {
-        if (waitpid(current->value, &status, WNOHANG | WUNTRACED) !=0)
+        char state = checkState(current->value);
+        if (state == "Z")
+        {
+            removeNode(bglist, current->value);
+        }
+        current = current->next;
+    }
+}
+void removeNode(PtrNode head, int valueToRemove)
+{
+    PtrNode current = head->next;
+    PtrNode previous = head;
+    int status;
+    while (current != NULL)
+    {
+        if (current->value == valueToRemove && waitpid(current->value, &status, WNOHANG | WUNTRACED) != 0)
         {
             if (WIFEXITED(status))
             {
@@ -45,43 +60,8 @@ void findKilled()
             {
                 printf("%s exited abnormally (%d)\n", current->name, current->value);
             }
-            if (previous == NULL)
-            {
-                bglist = current->next;
-            }
-            else
-            {
-                previous->next = current->next;
-            }
-            struct Node *temp = current;
-            current = current->next;
-            free(temp);
-        }
-        else
-        {
-            previous = current;
-            current = current->next;
-        }
-    }
-}
-void removeNode(PtrNode head, int valueToRemove)
-{
-    PtrNode current = head;
-    PtrNode previous = NULL;
-    while (current != NULL)
-    {
-        if (current->value == valueToRemove)
-        {
-            printf("%s exited normally (%d)\n", current->name, current->value);
-            if (previous == NULL)
-            {
-                head = current->next;
-            }
-            else
-            {
-                previous->next = current->next;
-            }
-            struct Node *temp = current;
+            previous->next = current->next;
+            PtrNode temp = current;
             current = current->next;
             free(temp);
         }
