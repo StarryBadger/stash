@@ -167,7 +167,6 @@ void convertPipesToString(int pipeCount, command pipes[pipeCount], char redirect
 command redirection(command cmd)
 {
     char pipers[16][128];
-    int blank = open("blankinput", O_RDONLY);
     char comm[128], input[128], output[128];
     char cmdStr[PATH_MAX];
     char cmdStrCopy[PATH_MAX];
@@ -283,7 +282,7 @@ command redirection(command cmd)
         if (length(redirectTo[i]))
         {
             dup2(tempOutput, 1);
-            in = blank;
+            in = fileDesc[0];
         }
         else
         {

@@ -2,6 +2,8 @@
 PtrNode bglist;
 char *home;
 char timetaker[PATH_MAX];
+char userInput[PATH_MAX];
+int userInputLength;
 int timetakertime;
 char *homePath()
 {

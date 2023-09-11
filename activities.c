@@ -26,6 +26,21 @@ void printActivities(int count, NodeStatus nodes[count])
             printf("%d : %s - Stopped\n", nodes[i].nodeptr->value, nodes[i].nodeptr->name);
     }
 }
+char checkState(int pid)
+{
+    char stat[25] = "\0";
+    sprintf(stat, "/proc/%d/stat", pid);
+    FILE *file = fopen(stat, "r");
+    int pgrp;
+    char state;
+    char executable[256];
+    unsigned long int vsize;
+    char exe[25] = "\0";
+    char TEMP[100];
+    fscanf(file, "%d (%[^)]) %c %s", &pid, TEMP, &state, TEMP);
+    fclose(file);
+    return state;
+}
 void activities(command cmd)
 {
     if (cmd.argc > 1)
@@ -40,7 +55,11 @@ void activities(command cmd)
     for (int i = 0; i < count; i++)
     {
         nodes[i].nodeptr = current;
-        nodes[i].running = waitpid(current->value, &status, WNOHANG) == 0;
+        char state=checkState(nodes[i].nodeptr->value);
+        if (state=='T')
+        nodes[i].running=false;
+        else
+
         current = current->next;
     }
     qsort(nodes, count, sizeof(NodeStatus), compareNodes);
