@@ -55,11 +55,15 @@ void activities(command cmd)
     for (int i = 0; i < count; i++)
     {
         nodes[i].nodeptr = current;
-        char state=checkState(nodes[i].nodeptr->value);
-        if (state=='T')
-        nodes[i].running=false;
+        char state = checkState(nodes[i].nodeptr->value);
+        if (state == 'T')
+        {
+            nodes[i].running = false;
+        }
         else
-
+        {
+            nodes[i].running = true;
+        }
         current = current->next;
     }
     qsort(nodes, count, sizeof(NodeStatus), compareNodes);

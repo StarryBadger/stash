@@ -18,15 +18,12 @@ Node *initializeList()
     return dummy;
 }
 
-void insertNode(Node *head, char *name, int value)
+void insertNode(PtrNode head, char *name, int value)
 {
-    Node *newNode = createNode(name, value);
-    Node *current = head;
-    while (current->next != NULL)
-    {
-        current = current->next;
-    }
-    current->next = newNode;
+    PtrNode newNode = createNode(name, value);
+    PtrNode tempPtr=head->next;
+    head->next=newNode;
+    newNode->next=tempPtr;
 }
 void findKilled()
 {
@@ -36,7 +33,7 @@ void findKilled()
     while (current != NULL)
     {
         char state = checkState(current->value);
-        if (state == "Z")
+        if (state == 'Z')
         {
             removeNode(bglist, current->value);
         }

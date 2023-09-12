@@ -82,9 +82,9 @@ int main()
         disableRawMode();
         printf("\n");
         mystrcpy(input, inp);
+        findKilled();
         time_t beforeCode;
         time(&beforeCode);
-        findKilled();
         toReprintPrompt=false;
         execute(input);
         toReprintPrompt=true;

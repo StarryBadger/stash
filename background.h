@@ -2,7 +2,7 @@
 #define __BACKGROUND_H
 typedef struct Node
 {
-    char name[64];
+    char name[32];
     int value;
     struct Node *next;
 }Node;

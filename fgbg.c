@@ -7,9 +7,9 @@ int foregroundMaker(int pid)
     tcsetpgrp(STDIN_FILENO, pid);
 
     int status;
-    waitpid(pid,&status,WUNTRACED);
+    waitpid(pid, &status, WUNTRACED);
 
-    tcsetpgrp(STDIN_FILENO, getpgid(0));    
+    tcsetpgrp(STDIN_FILENO, getpgid(0));
     signal(SIGTTIN, SIG_DFL);
     signal(SIGTTOU, SIG_DFL);
 
@@ -34,7 +34,10 @@ void bg(command cmd)
         fprintf(stderr, "\x1b[31mbg: pid should be a positive integer\n\x1b[0m");
         return;
     }
-    kill(pid, SIGCONT);
+    if (kill(pid, SIGCONT) != 0)
+    {
+        fprintf(stderr, "\x1b[31mfg: could not send execute\n\x1b[0m");
+    }
 }
 void fg(command cmd)
 {
@@ -55,7 +58,12 @@ void fg(command cmd)
         fprintf(stderr, "\x1b[31mfg: pid should be a positive integer\n\x1b[0m");
         return;
     }
-    kill(pid, SIGCONT);
-    int status=foregroundMaker(pid);
-    // removeNode(bglist,pid);
+    if (kill(pid, SIGCONT) == 0)
+    {
+        int status = foregroundMaker(pid);
+    }
+    else
+    {
+        fprintf(stderr, "\x1b[31mfg: could not send execute\n\x1b[0m");
+    }
 }

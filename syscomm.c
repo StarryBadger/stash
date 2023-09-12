@@ -25,7 +25,7 @@ void sysexec(command cmd)
             signal(SIGTTOU, SIG_DFL);
             if (WIFSTOPPED(status))
             {
-                insertNode(bglist, cmd.argv[0], status);
+                insertNode(bglist, cmd.argv[0], child);
             }
         }
         else
