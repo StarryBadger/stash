@@ -6,48 +6,48 @@
 ### To run the shell, run the command `make` on the terminal. This creates an executable `a.out` which can be run by `./a.out`
 
 .
-├── activities.c  
-├── activities.h  
-├── a.out  
-├── background.c  
-├── background.h  
-├── commands.c  
-├── commands.h  
-├── fgbg.c  
-├── fgbg.h  
-├── headers.h  
-├── history  
-├── iMan.c  
-├── iMan.h  
-├── main.c  
-├── makefile  
-├── myString.c  
-├── myString.h  
-├── neonate.c  
-├── neonate.h  
-├── pastevents.c  
-├── pastevents.h  
-├── peek.c  
-├── peek.h  
-├── ping.c  
-├── ping.h  
-├── proclore.c  
-├── proclore.h  
-├── prompt.c  
-├── prompt.h  
-├── raw.c  
-├── raw.h  
-├── README.md  
-├── redirection.c  
-├── redirection.h  
-├── seek.c  
-├── seek.h  
-├── signalhandler.c  
-├── signalhandler.h  
-├── syscomm.c  
-├── syscomm.h  
-├── warp.c  
-└── warp.h  
+├── activities.c (implementation of activities function) 
+├── activities.h (header files of activities.c) 
+├── a.out (executable) 
+├── background.c (implements background process list) 
+├── background.h (header files of background.c) 
+├── commands.c (executes commands entered in the prompt by the user) 
+├── commands.h (header files of commands.c) 
+├── fgbg.c (implemented fg and bg commands)
+├── fgbg.h (header files of fgbg.c)  
+├── headers.h (common header file with libraries and global variables) 
+├── history (file to store last 15 commands for pastevents) 
+├── iMan.c  (implemented iMan)
+├── iMan.h (header files of iMan.c) 
+├── main.c  (displays prompt and reads input and executes command)
+├── makefile  (makes file a.out)
+├── myString.c  (my implementation of string)
+├── myString.h (header files of myString.c) 
+├── neonate.c  (implemented neonate)
+├── neonate.h (header files of neonate.c) 
+├── pastevents.c  (implemented pastevents)
+├── pastevents.h (header files of pastevents.c) 
+├── peek.c  (implemented peek)
+├── peek.h (header files of peek.c) 
+├── ping.c  (implemented ping)
+├── ping.h (header files of ping.c) 
+├── proclore.c  (implemented proclore)
+├── proclore.h (header files of proclore.c) 
+├── prompt.c  (displays prompt)
+├── prompt.h (header files of prompt.c) 
+├── raw.c  (enables and disables raw mode)
+├── raw.h (header files of raw.c) 
+├── README.md  (current file)
+├── redirection.c  (implemented piping and I/O redirection)
+├── redirection.h (header files of redirection.c) 
+├── seek.c  (implemented seek)
+├── seek.h (header files of seek.c) 
+├── signalhandler.c  (implemented signal handlers)
+├── signalhandler.h (header files of signalhandler.c) 
+├── syscomm.c  (execute system commands using execvp)
+├── syscomm.h (header files of syscomm.c) 
+├── warp.c  (implemented warp)
+└── warp.h (header files of warp.c) 
 
 - background.* handles background processes including functions for the list containing them
 - commands.* execute the commands entered in prompt. Also responsble for parsing
