@@ -3,6 +3,7 @@
 
 #define _GNU_SOURCE
 
+#include <arpa/inet.h>
 #include <ctype.h>
 #include <dirent.h>
 #include <fcntl.h>
@@ -10,6 +11,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <linux/limits.h>
+#include <netdb.h>
 #include <pwd.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -37,6 +39,7 @@
 #include "raw.h"
 #include "fgbg.h"
 #include "neonate.h"
+#include "iman.h"
 
 extern char *home;
 extern commandList history[15];
