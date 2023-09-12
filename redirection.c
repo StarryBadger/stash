@@ -241,19 +241,22 @@ command redirection(command cmd)
     int tempOutput = dup(1);
     for (int i = 0; i < pipeCount; i++)
     {
-        // fprintf(stderr, "YIKES 1\n");
-        // fprintf(stderr, "\x1b[31m%d from: %s to:%s\n\x1b[0m",i, redirectFrom[i],redirectTo[i]);
         pipe(fileDesc);
         if (length(redirectFrom[i]))
         {
             in = open(redirectFrom[i], O_RDONLY);
+            if (in == -1)
+            {
+                fprintf(stderr, "\x1b[31mNo such input file found!\n\x1b[0m");
+                command cmdErr = commandify("error", cmd.foreground, true);
+                return cmdErr;
+            }
         }
         if (length(redirectTo[i]))
         {
             if (redirectInfo[i] == 'W')
             {
                 outfile = open(redirectTo[i], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-                // fprintf(stderr, "YIKES 2\n");
             }
             else
             {
@@ -291,6 +294,6 @@ command redirection(command cmd)
     }
     dup2(tempInput, 0);
     dup2(tempOutput, 1);
-    command cmdlm = commandify(cmdStrCopy, cmd.foreground, true);
-    return cmdlm;
+    command cmdRet = commandify(cmdStrCopy, cmd.foreground, true);
+    return cmdRet;
 }

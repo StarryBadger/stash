@@ -36,7 +36,7 @@ void bg(command cmd)
     }
     if (kill(pid, SIGCONT) != 0)
     {
-        fprintf(stderr, "\x1b[31mfg: could not execute\n\x1b[0m");
+        fprintf(stderr, "\x1b[31mNo such process found  \n\x1b[0m");
     }
 }
 void fg(command cmd)
@@ -65,6 +65,6 @@ void fg(command cmd)
     }
     else
     {
-        fprintf(stderr, "\x1b[31mfg: could not execute\n\x1b[0m");
+        fprintf(stderr, "\x1b[31mNo such process found\n\x1b[0m");
     }
 }
