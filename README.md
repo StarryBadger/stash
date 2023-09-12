@@ -1,6 +1,7 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/76mHqLr5)
 # Description
-
+## Welcome to StaSh
+### Written in C, StaSh provides a versatile and efficient command-line interface for Unix-like systems
 
 ## Final branch
 ### To run the shell, run the command `make` on the terminal. This creates an executable `a.out` which can be run by `./a.out`
@@ -69,3 +70,6 @@
 - iMan determines that the command is invalid if the man page has no instage of `NAME\n`, which is a common observation.
 - Signals are implemented for system commands, which are implemented by fork().
 - Block sizes may differ. `stBlocks` of struct `stat` has been used to determine sum of physical block sizes.
+
+##### Crafting simplicity from Complexity
+##### Shaunak Biswas, 2023.
