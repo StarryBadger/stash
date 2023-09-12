@@ -31,6 +31,25 @@ void neonate(command cmd)
     }
     enableRawMode();
     printLatestProcess();
+    if (alarmTime == 0)
+    {
+        while (1)
+        {
+            printLatestProcess();
+            if (kbhit())
+            {
+                char ch;
+                read(0, &ch, 1);
+                if (ch == 'x')
+                {
+                    xReceived = true;
+                    break;
+                }
+            }
+        }
+        disableRawMode();
+        return;
+    }
     alarm(alarmTime);
     int ch;
     while (1)
