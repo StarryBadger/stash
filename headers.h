@@ -36,6 +36,7 @@
 #include "ping.h"
 #include "raw.h"
 #include "fgbg.h"
+#include "neonate.h"
 
 extern char *home;
 extern commandList history[15];
@@ -53,6 +54,8 @@ extern PtrNode bglist;
 extern bool toReprintPrompt;
 extern char inp[PATH_MAX];
 extern int pt;
+extern int alarmTime;
+extern bool xReceived;
 
 #define MAX_COMMANDS 128
 #define DEBUG printf("1\n");

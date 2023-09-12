@@ -6,7 +6,13 @@ void die(const char *s)
 }
 
 struct termios orig_termios;
-
+int kbhit() {
+    struct timeval tv = {0L, 0L};
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(0, &fds);
+    return select(1, &fds, NULL, NULL, &tv);
+}
 void disableRawMode()
 {
     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)

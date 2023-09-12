@@ -25,6 +25,7 @@ void sysexec(command cmd)
             signal(SIGTTOU, SIG_DFL);
             if (WIFSTOPPED(status))
             {
+                // printf("I just inserted %s with pid %d as background\n",cmd.argv[0],child);
                 insertNode(bglist, cmd.argv[0], child);
             }
         }

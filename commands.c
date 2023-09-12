@@ -128,6 +128,10 @@ void executeCommand(commandList toExecute)
         {
             fg(modified.arr[i]);
         }
+        else if (equal(modified.arr[i].argv[0], "neonate"))
+        {
+            neonate(modified.arr[i]);
+        }
         else if (equal(modified.arr[i].argv[0], "peek"))
         {
             peek(modified.arr[i]);
@@ -186,6 +190,10 @@ void executeSingleCommand(command cmd)
     else if (equal(cmd.argv[0], "fg"))
     {
         fg(cmd);
+    }
+    else if (equal(cmd.argv[0], "neonate"))
+    {
+        neonate(cmd);
     }
     else if (equal(cmd.argv[0], "seek"))
     {

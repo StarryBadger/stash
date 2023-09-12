@@ -1,6 +1,7 @@
 #include "headers.h"
 void handleCtrlC()
 {
+    PtrNode current = bglist;
     if (toReprintPrompt)
     {
         printf("^C");
@@ -13,5 +14,13 @@ void handleCtrlC()
     else
     {
         printf("\n");
+    }
+}
+void handleAlarm()
+{
+    if (!xReceived)
+    {
+        printLatestProcess();
+        alarm(alarmTime);
     }
 }

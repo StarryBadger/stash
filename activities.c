@@ -31,6 +31,10 @@ char checkState(int pid)
     char stat[25] = "\0";
     sprintf(stat, "/proc/%d/stat", pid);
     FILE *file = fopen(stat, "r");
+    if (file == NULL)
+    {
+        return '\0';
+    }
     int pgrp;
     char state;
     char executable[256];

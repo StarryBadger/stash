@@ -36,7 +36,7 @@ void bg(command cmd)
     }
     if (kill(pid, SIGCONT) != 0)
     {
-        fprintf(stderr, "\x1b[31mfg: could not send execute\n\x1b[0m");
+        fprintf(stderr, "\x1b[31mfg: could not execute\n\x1b[0m");
     }
 }
 void fg(command cmd)
@@ -61,9 +61,10 @@ void fg(command cmd)
     if (kill(pid, SIGCONT) == 0)
     {
         int status = foregroundMaker(pid);
+        // getRidOfNode(bglist,pid);
     }
     else
     {
-        fprintf(stderr, "\x1b[31mfg: could not send execute\n\x1b[0m");
+        fprintf(stderr, "\x1b[31mfg: could not execute\n\x1b[0m");
     }
 }

@@ -12,4 +12,5 @@ struct Node *initializeList();
 struct Node *createNode(char *name, int value);
 void findKilled();
 void removeNode(PtrNode head, int valueToRemove);
+void getRidOfNode(PtrNode head, int valueToRemove);
 #endif

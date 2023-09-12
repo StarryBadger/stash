@@ -26,7 +26,8 @@ int main()
     sa.sa_handler = handleCtrlC;
     sa.sa_flags = SA_RESTART;
     sigaction(SIGINT, &sa, NULL);
-    signal(SIGTSTP,SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
+    signal(SIGALRM, handleAlarm);
     while (1)
     {
         prompt();
@@ -85,9 +86,9 @@ int main()
         findKilled();
         time_t beforeCode;
         time(&beforeCode);
-        toReprintPrompt=false;
+        toReprintPrompt = false;
         execute(input);
-        toReprintPrompt=true;
+        toReprintPrompt = true;
         time_t afterCode;
         time(&afterCode);
         char *token = strtok(inp, " \n\t\r\v\f");

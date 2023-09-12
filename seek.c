@@ -37,7 +37,10 @@ void lookFor(bool *D, bool *F, char *target, char *path)
 {
     DIR *directory = opendir(path);
     if (directory == NULL)
+    {
+        fprintf(stderr, "\x1b[31mseek: Could not open %s. Permission denied\n\n\x1b[0m",path);
         return;
+    }
     struct dirent *entry;
     while ((entry = readdir(directory)) != NULL)
     {

@@ -33,6 +33,10 @@ void findKilled()
     while (current != NULL)
     {
         char state = checkState(current->value);
+        if (state=='\0')
+        {
+            getRidOfNode(bglist,current->value);
+        }
         if (state == 'Z')
         {
             removeNode(bglist, current->value);
@@ -57,6 +61,27 @@ void removeNode(PtrNode head, int valueToRemove)
             {
                 printf("%s exited abnormally (%d)\n", current->name, current->value);
             }
+            previous->next = current->next;
+            PtrNode temp = current;
+            current = current->next;
+            free(temp);
+        }
+        else
+        {
+            previous = current;
+            current = current->next;
+        }
+    }
+}
+void getRidOfNode(PtrNode head, int valueToRemove)
+{
+    PtrNode current = head->next;
+    PtrNode previous = head;
+    int status;
+    while (current != NULL)
+    {
+        if (current->value == valueToRemove)
+        {
             previous->next = current->next;
             PtrNode temp = current;
             current = current->next;
