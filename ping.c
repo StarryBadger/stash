@@ -23,7 +23,7 @@ void ping(command cmd)
     signum = signum % 32;
     int status = kill(pid, signum);
     if (status!=0)
-    fprintf(stderr, "\x1b[31mping: some error occured while sending the signal\n\x1b[0m");
+    fprintf(stderr, "\x1b[31mNo such process found\n\x1b[0m");
     else
     printf("Sent signal %d to process with pid %d\n",pid,signum);
 }

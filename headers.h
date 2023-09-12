@@ -39,7 +39,7 @@
 #include "raw.h"
 #include "fgbg.h"
 #include "neonate.h"
-#include "iman.h"
+#include "iMan.h"
 
 extern char *home;
 extern commandList history[15];
@@ -59,6 +59,8 @@ extern char inp[PATH_MAX];
 extern int pt;
 extern int alarmTime;
 extern bool xReceived;
+extern bool pipeErrorFlg;
+extern bool tagFlag;
 
 #define MAX_COMMANDS 128
 #define DEBUG printf("1\n");

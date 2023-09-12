@@ -1,4 +1,37 @@
 #include "headers.h"
+bool pipeErrorFlag=false;
+bool invalidPipe(char *piped)
+{
+    int len = length(piped);
+    char str[len + 1];
+    mystrcpy(str, piped);
+    int i, j;
+    for (i = 0, j = 0; i < len; i++)
+    {
+        if (str[i] != ' ')
+        {
+            str[j++] = str[i];
+        }
+    }
+    str[j] = '\0';
+    int length = strlen(str);
+    if (str[0] == '|')
+    {
+        return true;
+    }
+    if (str[length - 1] == '|')
+    {
+        return true;
+    }
+    for (int i = 0; i < length - 1; i++)
+    {
+        if (str[i] == '|' && str[i + 1] == '|')
+        {
+            return true;
+        }
+    }
+    return false;
+}
 bool toRedirectOrPipe(char *str)
 {
     for (int i = 0; i < length(str); i++)
@@ -34,16 +67,13 @@ char toRedirect(char *str, char *strCmd, char *strInput, char *strOutput)
             }
             else if (str[i] == '>')
             {
-                // Check for append (>>) or write (>)
                 if (i + 1 < len && str[i + 1] == '>')
                 {
-                    // Append mode
                     outputStart = i + 2;
                     append = true;
                 }
                 else
                 {
-                    // Write mode
                     outputStart = i + 1;
                 }
             }
@@ -52,13 +82,11 @@ char toRedirect(char *str, char *strCmd, char *strInput, char *strOutput)
 
     if (cmdEnd == -1)
     {
-        // No redirection symbols found
         strncpy(strCmd, str, len);
         strCmd[len] = '\0';
         return 'X';
     }
 
-    // Extract the input and output file names
     if (inputStart != -1)
     {
         strncpy(strInput, str + inputStart, len - inputStart);
@@ -73,7 +101,6 @@ char toRedirect(char *str, char *strCmd, char *strInput, char *strOutput)
 
     if (inputStart != -1 && outputStart != -1)
     {
-        // Both input and output redirection
         if (append)
         {
             return 'A';
@@ -85,12 +112,10 @@ char toRedirect(char *str, char *strCmd, char *strInput, char *strOutput)
     }
     else if (inputStart != -1)
     {
-        // Input redirection
         return 'R';
     }
     else if (outputStart != -1)
     {
-        // Output redirection
         if (append)
         {
             return 'A';
@@ -102,34 +127,6 @@ char toRedirect(char *str, char *strCmd, char *strInput, char *strOutput)
     }
 
     return 'X';
-}
-void handlePipedExecution(int in, int out, command cmd, char *output, char outputFlag)
-{
-    if (in != 0)
-    {
-        dup2(in, 0);
-        close(in);
-    }
-    if (out != 1)
-    {
-        dup2(out, 1);
-        close(out);
-        if (length(output))
-        {
-            int outfile;
-            if (outputFlag == 'W')
-            {
-                outfile = open(output, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-            }
-            else
-            {
-                outfile = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
-            }
-            dup2(outfile, 1);
-            close(outfile);
-        }
-    }
-    executeSingleCommand(cmd);
 }
 void convertPipesToString(int pipeCount, command pipes[pipeCount], char redirectInfo[pipeCount], char redirectFrom[pipeCount][64], char redirectTo[pipeCount][64], char cmdStr[PATH_MAX])
 {
@@ -176,6 +173,12 @@ command redirection(command cmd)
         strcat(cmdStr, cmd.argv[i]);
         strcat(cmdStr, " ");
     }
+    if (invalidPipe(cmdStr))
+    {
+        fprintf(stderr, "\x1b[31mInvalid use of pipe\n\x1b[0m");
+        command cmdErr = commandify("error", cmd.foreground, true);
+        return cmdErr;
+    }
     char *token = strtok(cmdStr, "|");
     int pipeCount = 0;
     while (token != NULL)
@@ -211,6 +214,12 @@ command redirection(command cmd)
         // printf("Redirected to: %s\n", redirectTo[i]);
     }
     convertPipesToString(pipeCount, pipes, redirectInfo, redirectFrom, redirectTo, cmdStr);
+    if (invalidPipe(cmdStr))
+    {
+        fprintf(stderr, "\x1b[31mInvalid use of pipe\n\x1b[0m");
+        command cmdErr = commandify("error", cmd.foreground, true);
+        return cmdErr;
+    }
     pipeCount = 0;
     mystrcpy(cmdStrCopy, cmdStr);
     token = strtok(cmdStr, "|");

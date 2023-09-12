@@ -14,7 +14,7 @@ command commandify(char *str, bool stat, bool redirect)
     cmd.redirection = redirect;
     return cmd;
 }
-void execute(char* input)
+void execute(char *input)
 {
     int tokenCount = 0;
     commandList toExecute;
@@ -106,7 +106,11 @@ void executeCommand(commandList toExecute)
     {
         if (modified.arr[i].redirection)
         {
-            modified.arr[i] = redirection(modified.arr[i]);
+            command check = redirection(modified.arr[i]);
+            if (!equal(check.argv[0], "error"))
+            {
+                modified.arr[i] = check;
+            }
         }
         else if (equal(modified.arr[i].argv[0], "proclore"))
         {
@@ -116,9 +120,9 @@ void executeCommand(commandList toExecute)
         {
             warp(modified.arr[i]);
         }
-        else if (equal(modified.arr[i].argv[0], "iman"))
+        else if (equal(modified.arr[i].argv[0], "iMan"))
         {
-            iman(modified.arr[i]);
+            iMan(modified.arr[i]);
         }
         else if (equal(modified.arr[i].argv[0], "activities"))
         {
@@ -172,9 +176,9 @@ void executeSingleCommand(command cmd)
     {
         warp(cmd);
     }
-    else if (equal(cmd.argv[0], "iman"))
+    else if (equal(cmd.argv[0], "iMan"))
     {
-        iman(cmd);
+        iMan(cmd);
     }
     else if (equal(cmd.argv[0], "activities"))
     {

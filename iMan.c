@@ -1,7 +1,7 @@
 #include "headers.h"
+bool tagFlag = false;
 void printWithoutTags(char *str)
 {
-    bool tagFlag = false;
     for (int i = 0; i < length(str); i++)
     {
         if (str[i] == '<')
@@ -38,16 +38,17 @@ int resolveHost(char *ip)
     fprintf(stderr, "\x1b[31mUnable to resolve host\n\x1b[0m");
     return 1;
 }
-void iman(command cmd)
+void iMan(command cmd)
 {
+    tagFlag=false;
     if (cmd.argc == 1)
     {
-        fprintf(stderr, "\x1b[31miman: command name missing\n\x1b[0m");
+        fprintf(stderr, "\x1b[31miMan: command name missing\n\x1b[0m");
         return;
     }
     else if (cmd.argc > 2)
     {
-        fprintf(stderr, "\x1b[31miman: too many arguments\n\x1b[0m");
+        fprintf(stderr, "\x1b[31miMan: too many arguments\n\x1b[0m");
         return;
     }
 
@@ -61,7 +62,7 @@ void iman(command cmd)
     mySocket = socket(AF_INET, SOCK_STREAM, 0);
     if (mySocket == -1)
     {
-        fprintf(stderr, "\x1b[31miman: Unable to create a new socket\n\x1b[0m");
+        fprintf(stderr, "\x1b[31miMan: Unable to create a new socket\n\x1b[0m");
         return;
     }
     struct sockaddr_in serverAddress;
@@ -71,7 +72,7 @@ void iman(command cmd)
 
     if (connect(mySocket, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
     {
-        fprintf(stderr, "\x1b[31miman: Could not initiate a connection to a server\n\x1b[0m");
+        fprintf(stderr, "\x1b[31miMan: Could not initiate a connection to a server\n\x1b[0m");
         close(mySocket);
         return;
     }
@@ -86,7 +87,7 @@ void iman(command cmd)
     int transmitRequest = send(mySocket, request, strlen(request), 0);
     if (transmitRequest == -1)
     {
-        fprintf(stderr, "\x1b[31miman: Could not transmit data\n\x1b[0m");
+        fprintf(stderr, "\x1b[31miMan: Could not transmit data\n\x1b[0m");
         close(mySocket);
     }
     int bytesReceived;
@@ -112,7 +113,7 @@ void iman(command cmd)
     }
     if (bytesReceived == -1)
     {
-        fprintf(stderr, "\x1b[31miman: An error occured while receiving data\n\x1b[0m");
+        fprintf(stderr, "\x1b[31miMan: An error occured while receiving data\n\x1b[0m");
     }
     close(mySocket);
 }
