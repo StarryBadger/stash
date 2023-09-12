@@ -87,25 +87,26 @@ int myatoi(char *str)
 bool equalNameWithExtension(char *file, char *search)
 {
     int i;
-    if (!prefix(search, file))
-        return false;
-    for (i = length(file) - 1; i >= 0; i--)
-        if (file[i] == '.')
-            break;
-    if (i == -1)
-        return equal(file, search);
-    for (i = length(search) - 1; i >= 0; i--)
-        if (search[i] == '.')
-            return false;
-
-    int j = 0;
-    while (j < i)
+    int len = length(file);
+    char str[len + 1];
+    mystrcpy(str, file);
+    for (i = length(str) - 1; i >= 0; i--)
     {
-        if (file[j] != search[j])
-            return false;
-        j++;
+        if (str[i] == '.')
+        {
+            break;
+        }
     }
-    return true;
+    if (i == -1)
+    {
+        return false;
+    }
+    str[i] = '\0';
+    if (equal(str, search))
+    {
+        return true;
+    }
+    return false;
 }
 bool myIsspace(char c)
 {
