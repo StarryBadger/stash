@@ -116,6 +116,10 @@ void executeCommand(commandList toExecute)
         {
             warp(modified.arr[i]);
         }
+        else if (equal(modified.arr[i].argv[0], "iman"))
+        {
+            iman(modified.arr[i]);
+        }
         else if (equal(modified.arr[i].argv[0], "activities"))
         {
             activities(modified.arr[i]);
@@ -153,8 +157,6 @@ void executeCommand(commandList toExecute)
             sysexec(modified.arr[i]);
         }
     }
-    // printCommand(modified.arr[0], 0);
-    // printf("SAVE? %d\n", toSave);
     if (toSave)
     {
         saveToHistory(modified);
@@ -162,7 +164,6 @@ void executeCommand(commandList toExecute)
 }
 void executeSingleCommand(command cmd)
 {
-    // printf("%s!!!",cmd.argv[0]);
     if (equal(cmd.argv[0], "proclore"))
     {
         proclore(cmd);
@@ -170,6 +171,10 @@ void executeSingleCommand(command cmd)
     else if (equal(cmd.argv[0], "warp"))
     {
         warp(cmd);
+    }
+    else if (equal(cmd.argv[0], "iman"))
+    {
+        iman(cmd);
     }
     else if (equal(cmd.argv[0], "activities"))
     {

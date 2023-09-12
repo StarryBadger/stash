@@ -2,6 +2,5 @@
 #define __RAW_H_
 void disableRawMode();
 void enableRawMode();
-int kbhit();
 void die(const char *s);
 #endif

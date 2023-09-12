@@ -35,15 +35,12 @@ void neonate(command cmd)
     int ch;
     while (1)
     {
-        if (kbhit())
+        char ch;
+        read(0, &ch, 1);
+        if (ch == 'x')
         {
-            char ch;
-            read(0, &ch, 1);
-            if (ch == 'x')
-            {
-                xReceived = true;
-                break;
-            }
+            xReceived = true;
+            break;
         }
     }
     disableRawMode();
