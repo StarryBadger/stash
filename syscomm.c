@@ -42,7 +42,7 @@ void sysexec(command cmd)
         signal(SIGTSTP, SIG_DFL);
         if (execvp(argv[0], argv) == -1)
         {
-            fprintf(stderr, "\x1b[31mUnable to execute %s\n\x1b[0m", argv[0]);
+            fprintf(stderr, "\x1b[31mERROR : '%s' is not a valid command\n\x1b[0m", argv[0]);
             exit(1);
         }
     }

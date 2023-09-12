@@ -165,12 +165,14 @@ void peek(command cmd)
     DIR *directory = opendir(path);
     if (!directory)
     {
-        perror("opendir");
+        fprintf(stderr, "\x1b[31m%s is not a valid directory/flag\n\x1b[0m", path);
         return;
     }
     int n = scandir(path, &namelist, 0, alphasort);
     if (n < 0)
-        perror("scandir");
+    {
+        fprintf(stderr, "\x1b[31mpeek: Could not scan directory\n\x1b[0m");
+    }
     int maxLength = 0;
     for (int i = 0; i < n; i++)
     {
@@ -185,7 +187,6 @@ void peek(command cmd)
                 continue;
             totalBlockSize(path, namelist[i]->d_name);
         }
-        total_block_size /= 2;
         printf("total %4lu\n", total_block_size);
     }
     for (int i = 0; i < n; ++i)

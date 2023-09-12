@@ -1,31 +1,49 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/76mHqLr5)
 # Description
+
+
 ## Final branch
 ### To run the shell, run the command `make` on the terminal. This creates an executable `a.out` which can be run by `./a.out`
 
-.  
+.
+├── activities.c  
+├── activities.h  
 ├── a.out  
 ├── background.c  
 ├── background.h  
 ├── commands.c  
 ├── commands.h  
+├── fgbg.c  
+├── fgbg.h  
 ├── headers.h  
 ├── history  
+├── iMan.c  
+├── iMan.h  
 ├── main.c  
 ├── makefile  
 ├── myString.c  
 ├── myString.h  
+├── neonate.c  
+├── neonate.h  
 ├── pastevents.c  
 ├── pastevents.h  
 ├── peek.c  
 ├── peek.h  
+├── ping.c  
+├── ping.h  
 ├── proclore.c  
 ├── proclore.h  
 ├── prompt.c  
 ├── prompt.h  
+├── raw.c  
+├── raw.h  
 ├── README.md  
+├── redirection.c  
+├── redirection.h  
 ├── seek.c  
 ├── seek.h  
+├── signalhandler.c  
+├── signalhandler.h  
 ├── syscomm.c  
 ├── syscomm.h  
 ├── warp.c  
@@ -47,6 +65,7 @@
 
 # Assumptions
 ## As stated/approved in the doubt document:
+- `bash` has been used as the default hsell to determine outputs
 - For peek and seek, green has been used for executables, white for files and blue for directories
 - "Lexicographical ordering implies sorting a set of strings based on the ASCII values of the individual characters in a string". README.md appears before headers.h for peek
 - For peek -l, the output is displayed exactly like bash, `%h %d %H:%M` for files not as old as 6 months, and `%h %d %Y` for files older than that. An average month length of 30.4 days has been considered to calculate this.
@@ -58,4 +77,9 @@
 - When a prompt takes >2 seconds to execute, the name of the first command is displayed (as we were allowed to display anything with proper assumptions and this felt the most aethetically pleasing)
 - error messages due to functions defined in C, like, perror messages are not displayed in red.
 - Assumptions have been made for path lengths to be PATH_MAX/PATH_MAX-1 as well as that only be 50 commands in one prompt, each with max 128 paramters and each parameter with max 127 characters.
-
+- For activities, 'T' state processes are considered are Stopped, all other processes are considered Running
+- A background process brought to foreground is rmoved from the background process list. No output is displayed on its termination.
+- Exited background processes are displayed between the two prompts when the ended.
+- Stopped processes, on killing the terminal are finished after catching a deadly signal HUP
+- iMan determines that the command is invalid if the man page has no instage of `NAME\n`, which is a common observation.
+- Signals are implemented for system commands, which are implemented by fork().

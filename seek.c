@@ -145,7 +145,7 @@ void seek(command cmd)
                 FILE *file = fopen(executeMe, "r");
                 if (file == NULL)
                 {
-                    perror("Error opening file");
+                    fprintf(stderr, "\x1b[31mseek: Error in opening file\n\x1b[0m");
                     return;
                 }
                 char ch;

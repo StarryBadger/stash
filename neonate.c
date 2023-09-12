@@ -26,7 +26,7 @@ void neonate(command cmd)
     alarmTime = myatoi(cmd.argv[2]);
     if (alarmTime == -1)
     {
-        fprintf(stderr, "\x1b[31mneonate: time_arg should be a positive integer\n\x1b[0m");
+        fprintf(stderr, "\x1b[31mneonate: time_arg should be a non-negative integer\n\x1b[0m");
         return;
     }
     enableRawMode();
