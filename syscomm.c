@@ -17,7 +17,6 @@ void sysexec(command cmd)
             signal(SIGTTIN, SIG_IGN);
             signal(SIGTTOU, SIG_IGN);
             tcsetpgrp(STDIN_FILENO, child);
-
             int status;
             waitpid(child, &status, WUNTRACED);
             tcsetpgrp(STDIN_FILENO, getpgid(0));
@@ -25,7 +24,6 @@ void sysexec(command cmd)
             signal(SIGTTOU, SIG_DFL);
             if (WIFSTOPPED(status))
             {
-                // printf("I just inserted %s with pid %d as background\n",cmd.argv[0],child);
                 insertNode(bglist, cmd.argv[0], child);
             }
         }

@@ -46,7 +46,7 @@
 ├── seek.h (header files of seek.c)     
 ├── signalhandler.c  (implemented signal handlers)  
 ├── signalhandler.h (header files of signalhandler.c)   
-├── syscomm.c  (execute system commands using execvp)   
+├── syscomm.c  (execute system commands using execvp. also sends necessary signals to executing processes)   
 ├── syscomm.h (header files of syscomm.c)   
 ├── warp.c  (implemented warp)  
 └── warp.h (header files of warp.c)     
