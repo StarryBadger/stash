@@ -71,3 +71,4 @@
 - iMan determines that the command is invalid if the man page has no instage of `NAME\n`, which is a common observation.
 - Signals are implemented for system commands, which are implemented by fork().
 - Block sizes may differ. `stBlocks` of struct `stat` has been used to determine sum of physical block sizes.
+- For `proclore`, we fetch the pgrp in the code of `proclore` itself using pargrp = getpgrp() and compare it with the pgrp of the given pid. As only one process has control of the terminal at a time, + is added to process status if pargrp = pgrp.
