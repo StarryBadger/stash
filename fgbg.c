@@ -1,18 +1,15 @@
 #include "headers.h"
-int foregroundMaker(int pid)
+int waitForMe(int pid)
 {
+    int status;
     setpgid(pid, 0);
     signal(SIGTTIN, SIG_IGN);
     signal(SIGTTOU, SIG_IGN);
     tcsetpgrp(STDIN_FILENO, pid);
-
-    int status;
     waitpid(pid, &status, WUNTRACED);
-
     tcsetpgrp(STDIN_FILENO, getpgid(0));
-    signal(SIGTTIN, SIG_DFL);
     signal(SIGTTOU, SIG_DFL);
-
+    signal(SIGTTIN, SIG_DFL);
     return status;
 }
 void bg(command cmd)
@@ -60,8 +57,7 @@ void fg(command cmd)
     }
     if (kill(pid, SIGCONT) == 0)
     {
-        int status = foregroundMaker(pid);
-        // getRidOfNode(bglist,pid);
+        waitForMe(pid);
     }
     else
     {

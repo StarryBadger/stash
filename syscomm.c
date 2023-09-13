@@ -13,15 +13,7 @@ void sysexec(command cmd)
     {
         if (cmd.foreground)
         {
-            setpgid(child, 0);
-            signal(SIGTTIN, SIG_IGN);
-            signal(SIGTTOU, SIG_IGN);
-            tcsetpgrp(STDIN_FILENO, child);
-            int status;
-            waitpid(child, &status, WUNTRACED);
-            tcsetpgrp(STDIN_FILENO, getpgid(0));
-            signal(SIGTTIN, SIG_DFL);
-            signal(SIGTTOU, SIG_DFL);
+            int status=waitForMe(child);
             if (WIFSTOPPED(status))
             {
                 insertNode(bglist, cmd.argv[0], child);
