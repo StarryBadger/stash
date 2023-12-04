@@ -2,7 +2,7 @@
 #define __BACKGROUND_H
 typedef struct Node
 {
-    char name[64];
+    char name[32];
     int value;
     struct Node *next;
 }Node;
@@ -11,5 +11,6 @@ void insertNode(struct Node *head, char *name, int value);
 struct Node *initializeList();
 struct Node *createNode(char *name, int value);
 void findKilled();
-void removeNode(struct Node *head, int valueToRemove);
+void removeNode(PtrNode head, int valueToRemove);
+void getRidOfNode(PtrNode head, int valueToRemove);
 #endif

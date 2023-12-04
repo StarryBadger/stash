@@ -2,9 +2,10 @@
 int foundcount = 0;
 int pathlength;
 char executeMe[PATH_MAX];
-bool setSeekFlags(char *input, bool *F, bool *E, bool *D)
+int setSeekFlags(char *input, bool *F, bool *E, bool *D)
 {
     if (equal(input, "-e") ||
+        equal(input, "-d") ||
         equal(input, "-f") ||
         equal(input, "-ef") ||
         equal(input, "-fe") ||
@@ -26,23 +27,39 @@ bool setSeekFlags(char *input, bool *F, bool *E, bool *D)
                 *E = true;
             }
         }
-        return true;
+        return 1;
+    }
+    else if (equal(input, "-fd") ||
+             equal(input, "-df") ||
+             equal(input, "-def") ||
+             equal(input, "-dfe") ||
+             equal(input, "-edf") ||
+             equal(input, "-efd") ||
+             equal(input, "-fde") ||
+             equal(input, "-fed"))
+    {
+        return 2;
     }
     else
     {
-        return false;
+        return 0;
     }
 }
-void lookFor(bool *D, bool *F, char *target, char *path)
+void lookFor(bool D, bool F, char *target, char *path)
 {
     DIR *directory = opendir(path);
     if (directory == NULL)
+    {
+        fprintf(stderr, "\x1b[31mseek: Could not open %s. Permission denied\n\n\x1b[0m", path);
         return;
+    }
     struct dirent *entry;
     while ((entry = readdir(directory)) != NULL)
     {
         if (equal(entry->d_name, ".") || equal(entry->d_name, ".."))
+        {
             continue;
+        }
         char pathBranch[PATH_MAX];
         mystrcpy(pathBranch, path);
         if (pathBranch[length(pathBranch) - 1] != '/')
@@ -53,7 +70,7 @@ void lookFor(bool *D, bool *F, char *target, char *path)
             continue;
         if (S_ISDIR(st.st_mode))
         {
-            if (equal(entry->d_name, target) && !*F)
+            if (equal(entry->d_name, target) && !F)
             {
                 printf(BLUE ".%s\n" RESET, pathBranch + pathlength);
                 foundcount++;
@@ -61,7 +78,7 @@ void lookFor(bool *D, bool *F, char *target, char *path)
             }
             lookFor(D, F, target, pathBranch);
         }
-        else if (S_ISREG(st.st_mode) && !*D)
+        else if (S_ISREG(st.st_mode) && !D)
         {
             if (equal(entry->d_name, target) || equalNameWithExtension(entry->d_name, target))
             {
@@ -80,6 +97,7 @@ void seek(command cmd)
     bool targetset = false;
     char target[PATH_MAX], path[PATH_MAX];
     int i = 1;
+    int res;
     if (cmd.argc == 1)
     {
         fprintf(stderr, "\x1b[31mseek: No target file/directory\n\x1b[0m");
@@ -87,8 +105,15 @@ void seek(command cmd)
     }
     for (int i = 1; i < cmd.argc; i++)
     {
-        if (setSeekFlags(cmd.argv[i], &F, &E, &D))
+        if (res = setSeekFlags(cmd.argv[i], &F, &E, &D))
+        {
+            if (res == 2)
+            {
+                fprintf(stderr, "\x1b[31mseek: Invalid flags\n\x1b[0m");
+                return;
+            }
             continue;
+        }
         strcpy(target, cmd.argv[i]);
         targetset = true;
         if (i == cmd.argc - 1)
@@ -114,7 +139,7 @@ void seek(command cmd)
     }
     if (F && D)
     {
-        fprintf(stderr, "\x1b[31mseek: Invalid flags\x1b[0m");
+        fprintf(stderr, "\x1b[31mseek: Invalid flags\n\x1b[0m");
         return;
     }
     if (prefix("~", path))
@@ -122,7 +147,7 @@ void seek(command cmd)
         mystrcpy(path, replaceTildeWithHome(path));
     }
     pathlength = length(path);
-    lookFor(&D, &F, target, path);
+    lookFor(D, F, target, path);
     if (foundcount == 0)
     {
         printf("No match found!\n");
@@ -142,7 +167,7 @@ void seek(command cmd)
                 FILE *file = fopen(executeMe, "r");
                 if (file == NULL)
                 {
-                    perror("Error opening file");
+                    fprintf(stderr, "\x1b[31mseek: Error in opening file\n\x1b[0m");
                     return;
                 }
                 char ch;

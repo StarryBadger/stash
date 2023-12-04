@@ -18,34 +18,51 @@ Node *initializeList()
     return dummy;
 }
 
-void insertNode(Node *head, char *name, int value)
+void insertNode(PtrNode head, char *name, int value)
 {
-    Node *newNode = createNode(name, value);
-    Node *current = head;
-    while (current->next != NULL)
-    {
-        current = current->next;
-    }
-    current->next = newNode;
+    PtrNode newNode = createNode(name, value);
+    PtrNode tempPtr=head->next;
+    head->next=newNode;
+    newNode->next=tempPtr;
 }
-void removeNode(struct Node *head, int valueToRemove)
+void findKilled()
 {
-    struct Node *current = head;
-    struct Node *previous = NULL;
+    int status;
+    PtrNode current = bglist->next;
+    PtrNode previous = bglist;
     while (current != NULL)
     {
-        if (current->value == valueToRemove)
+        char state = checkState(current->value);
+        if (state=='\0')
         {
-            printf("%s exited normally (%d)\n", current->name, current->value);
-            if (previous == NULL)
+            getRidOfNode(bglist,current->value);
+        }
+        if (state == 'Z')
+        {
+            removeNode(bglist, current->value);
+        }
+        current = current->next;
+    }
+}
+void removeNode(PtrNode head, int valueToRemove)
+{
+    PtrNode current = head->next;
+    PtrNode previous = head;
+    int status;
+    while (current != NULL)
+    {
+        if (current->value == valueToRemove && waitpid(current->value, &status, WNOHANG | WUNTRACED) != 0)
+        {
+            if (WIFEXITED(status))
             {
-                head = current->next;
+                printf("%s exited normally (%d)\n", current->name, current->value);
             }
             else
             {
-                previous->next = current->next;
+                printf("%s exited abnormally (%d)\n", current->name, current->value);
             }
-            struct Node *temp = current;
+            previous->next = current->next;
+            PtrNode temp = current;
             current = current->next;
             free(temp);
         }
@@ -56,12 +73,24 @@ void removeNode(struct Node *head, int valueToRemove)
         }
     }
 }
-void findKilled()
+void getRidOfNode(PtrNode head, int valueToRemove)
 {
-    pid_t killed;
+    PtrNode current = head->next;
+    PtrNode previous = head;
     int status;
-    while ((killed = waitpid(-1, &status,WNOHANG)) > 0)
+    while (current != NULL)
     {
-        removeNode(bglist, killed);
+        if (current->value == valueToRemove)
+        {
+            previous->next = current->next;
+            PtrNode temp = current;
+            current = current->next;
+            free(temp);
+        }
+        else
+        {
+            previous = current;
+            current = current->next;
+        }
     }
 }

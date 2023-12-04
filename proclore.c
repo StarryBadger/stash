@@ -26,7 +26,7 @@ void proclore(command cmd)
     FILE *file = fopen(stat, "r");
     if (file == NULL)
     {
-        perror("Failed to open stat file");
+        fprintf(stderr, "\x1b[31mproclore: Unable to open stat file\n\x1b[0m");
         return;
     }
     int pgrp;
